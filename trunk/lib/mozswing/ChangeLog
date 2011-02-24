@@ -1,0 +1,19 @@
+2008-08-03  version 2.0beta1
+
+	* upgrade to xulrunner1.9 (=Firefox3)
+	* added support for linux/x86, solarix/x86
+	* fixed classloaders problems on OSX Leopard
+	* fixed extension manager to work
+	* reduce flicker under osx when resizing the widget
+	* added methods converting DOM elements to coordinates
+
+2008-08-03  version 1.0
+
+	* equal to 1.0beta1
+
+2008-02-08  version 1.0beta1
+
+	* first public release
+	* based on xulrunner1.8  (=Firefox2)
+	* support for win32, osx/i386, osx/ppc
+
