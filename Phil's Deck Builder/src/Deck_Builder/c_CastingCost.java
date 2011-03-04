@@ -22,17 +22,12 @@ public class c_CastingCost extends c_Colors {
     private final static Integer GLYPH_HEIGHT_IN = GLYPH_WIDTH_IN;
     private final static Integer GLYPH_WIDTH_OUT = 16;
     private final static Integer GLYPH_HEIGHT_OUT = GLYPH_WIDTH_OUT;
+    //private final static String[] GLYPHS = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "X", "B", "U", "G", "R", "W", ")" };
 
     private ArrayList<String> m_glyphs;
 
     public c_CastingCost() {
         m_glyphs = new ArrayList<String>();
-    }
-
-    @Override
-    public void finalize() throws Throwable {
-        m_glyphs = null;
-        super.finalize();
     }
 
     public c_CastingCost( String glyphs ) {
@@ -42,13 +37,48 @@ public class c_CastingCost extends c_Colors {
             return;
         }
 
-        String temp[] = glyphs.split( "," );
+        String ary[] = glyphs.split( "," );
         m_glyphs = new ArrayList<String>();
-        m_glyphs.addAll(Arrays.asList(temp));
+        m_glyphs.addAll(Arrays.asList(ary));
         setColors( glyphs );
 
-        temp = null;
-        ////System.gc();
+        ary = null;
+    }
+
+    public static String tokenize( String glyphs ) {
+        String temp = "";
+        boolean isDigit = false;
+        boolean isParen = false;
+        for( int i=0; i<glyphs.length(); i++ ) {
+            char ch = glyphs.charAt( i );
+            if( Character.isDigit( ch ) && isParen == false ) {
+                isDigit = true;
+                temp += ch;
+            } else if( ch == '(' ) {
+                isParen = true;
+                if( isDigit ) {
+                    isDigit = false;
+                    temp += ",";
+                }
+            } else if( isParen && ch != ')' ) {
+                if( Character.isLetter( ch ) || Character.isDigit( ch ) ) {
+                    temp += ch;
+                }
+            } else if( ch == ')' ) {
+                isParen = false;
+                temp += ",";
+            } else {
+                if( isDigit ) {
+                    isDigit = false;
+                    temp += ",";
+                }
+                temp += ch + ",";
+            }
+        }
+        if( temp.endsWith( "," ) ) {
+            return temp.substring( 0, temp.length() - 1 );
+        }
+        return temp;
     }
 
     @Override
@@ -102,18 +132,10 @@ public class c_CastingCost extends c_Colors {
 
     private ImageIcon getGlyphImage( String glyph ) {
         String path = String.format( GLYPH_DIR, glyph );
-        ImageIcon img;
         if( doesImageExist( path ) ) {
-            img = new ImageIcon( getClass().getResource( path ) );
-
-            path = null;
-            return img;
+            return new ImageIcon( getClass().getResource( path ) );
         }
-
-        path = null;
-        ////System.gc();
-        img = new ImageIcon( getGlyphImage( "-1" ).getImage() );
-        return img;
+        return new ImageIcon( getGlyphImage( "-1" ).getImage() );
     }
 
     public ImageIcon getImage() {
@@ -134,7 +156,6 @@ public class c_CastingCost extends c_Colors {
 
         g = null;
         glyph = null;
-        ////System.gc();
 
         int width_out = getWidthOut( m_glyphs.get( 0 ) );
         ImageIcon icon = new ImageIcon( img.getScaledInstance( width_out * m_glyphs.size(), GLYPH_HEIGHT_OUT, Image.SCALE_SMOOTH ), "" );

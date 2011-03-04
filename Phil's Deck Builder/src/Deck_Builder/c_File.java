@@ -15,7 +15,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintStream;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -24,32 +26,63 @@ import javax.swing.event.EventListenerList;
  */
 public class c_File {
     private EventListenerList m_listeners = new EventListenerList();
+    private static final String[] m_invalidChars = { "\\", "/", ":", "*", "?", "\"", "<", ">", "|" };
 
     public c_File() {
-    }
-
-    @Override
-    public void finalize() throws Throwable {
-        m_listeners = null;
-        super.finalize();
     }
 
     public static String getFilename( String filepath ) {
         String separator = "/";
         if( filepath.contains( "\\" ) ) {
-            separator = "\\";
+            separator = "\\\\";
         }
         String[] path = filepath.split( separator );
         return path[ path.length - 1 ];
     }
 
+    public static String getExtension( String filepath ) {
+        String ext = "";
+        int i = filepath.lastIndexOf( '.' );
+
+        if( i > 0 && i < filepath.length() - 1 ) {
+            ext = filepath.substring(i+1).toLowerCase();
+        }
+        return ext;
+    }
+
+    public static String setExtension( String filepath, String extension ) {
+        String ext = getExtension( filepath.toLowerCase() );
+        String fpath = filepath;
+        if( ext.length() > 0 ) {
+            fpath = filepath.replace( "." + ext, "." + extension );
+        }
+        return fpath;
+    }
+
+    public static String removeInvalidFilenameChars( String filename ) {
+        String fname = getFilename( filename );
+        boolean hasInvChars = false;
+        for( String invChar : m_invalidChars ) {
+            if( fname.contains( invChar ) ) {
+                hasInvChars = true;
+                fname = fname.replaceAll( invChar, "" );
+            }
+        }
+        if( hasInvChars ) {
+            return filename.replace( getFilename( filename ), fname );
+        }
+        return filename;
+    }
+
     public void write( String filepath, String data ) throws FileNotFoundException, IOException {
-        File f = new File( filepath );
+        File f = new File( removeInvalidFilenameChars( filepath ) );
         FileOutputStream fop = new FileOutputStream( f );
+        PrintStream ps = new PrintStream( fop );
 
         if( f.exists() ) {
-            fop.write( data.getBytes() );
-            fop.flush();
+            ps.print( data );
+            ps.close();
+            //fop.flush();
             fop.close();
         }
 
@@ -61,55 +94,42 @@ public class c_File {
         addActionListener( listener );
 
         if( asResource ) {
-            //try {
-                //System.console().printf( "filepath='%s'\n", filepath );
-                InputStream in = getClass().getResourceAsStream( filepath );
-                InputStreamReader isr = new InputStreamReader(in);
-                BufferedReader br = new BufferedReader(isr);
-                String line;
-                while ((line = br.readLine()) != null) {
-                    fireActionEvent( _class, action, line );
-                    line = null;
-                }
-                
-                br = null;
-                isr = null;
-                in = null;
+            InputStream in = getClass().getResourceAsStream( filepath );
+            InputStreamReader isr = new InputStreamReader(in);
+            BufferedReader br = new BufferedReader(isr);
+            String line;
+            while ((line = br.readLine()) != null) {
+                fireActionEvent( _class, action, line );
                 line = null;
-                //System.gc();
-            //} catch (IOException io) {
-            //    int i=0;
-            //    System.console().printf( "filepath='%s'", filepath );
-            //}
+            }
+
+            br = null;
+            isr = null;
+            in = null;
+            line = null;
         } else {
             Scanner scanner = null;
             FileReader fr = null;
-            //try {
-                fr = new FileReader( filepath );
-                scanner = new Scanner( fr );
-                String line;
+            fr = new FileReader( filepath );
+            //File file = new File( filepath );
+            scanner = new Scanner( fr );
+            scanner.useDelimiter( "\r\n" );
+            String line;
 
-                //first use a Scanner to get each line
-                while ( scanner.hasNextLine() ) {
-                    line = scanner.nextLine();
-                    fireActionEvent( _class, action, line );
-                    line = null;
-                }
-            //} catch( Exception ex ) {
-            //    int i=0;
-            //    ex.getStackTrace();
-            //} finally {
-                if( scanner != null ) {
-                    scanner.close();
+            while( scanner.hasNext() ) {
+                line = scanner.next();
+                fireActionEvent( _class, action, line );
+                line = null;
+            }
 
-                    fr = null;
-                    scanner = null;
-                }
+            if( scanner != null ) {
+                scanner.close();
 
-                fireActionEvent( _class, Action.ACTION_FILE_LOAD_DONE, Action.COMMAND_FILE_LOAD_DONE );
+                fr = null;
+                scanner = null;
+            }
 
-                //System.gc();
-            //}
+            fireActionEvent( _class, Action.ACTION_FILE_LOAD_DONE, Action.COMMAND_FILE_LOAD_DONE );
         }
     }
 

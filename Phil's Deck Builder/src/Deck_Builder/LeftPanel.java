@@ -27,7 +27,7 @@ public class LeftPanel extends JPanel implements ActionListener {
     private RecentlyViewedTableModel m_recentlyViewedCTM = new RecentlyViewedTableModel();
 
     private c_Deck m_recentlyViewedCards = new c_Deck();
-    private c_CardDB m_cardDB = new c_CardDB();
+    private c_CardDB m_cardDB = new c_CardDB( "db.txt" );
     private c_PriceDB m_priceDB = new c_PriceDB( m_cardDB );
     private c_Card m_previewCard = new c_Card();
     public static final Integer MAX_DECKS = 6;

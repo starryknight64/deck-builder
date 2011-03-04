@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import Deck_Builder.c_Deck.WhichHalf;
+import Deck_Builder.c_Expansion.Acronym;
 import Deck_Builder.c_Price.PriceType;
 import org.apache.commons.io.FileUtils;
 
@@ -38,7 +39,7 @@ public class c_PriceDB implements ActionListener {
     private static final String ACRONYMS_FILE = "/resources/Acronyms.txt";
                   //Card Name is String
     private HashMap<String, c_PriceEntry> m_prices = new HashMap<String, c_PriceEntry>();
-    private HashMap<String, String> m_expansionAcronyms = new HashMap<String, String>();
+    private c_ExpansionDB m_expansionDB;
     private boolean parsedFirstLineAcronyms = false;
     private boolean parsedFirstListPrices = false;
 
@@ -46,32 +47,13 @@ public class c_PriceDB implements ActionListener {
 
     public c_PriceDB() {
         m_db = new c_CardDB();
-        initAcronyms();
+        m_expansionDB = new c_ExpansionDB();
     }
 
     public c_PriceDB( c_CardDB db ) {
         m_db = db;
-        initAcronyms();
+        m_expansionDB = db.getExpansionDB();
         updatePrices();
-    }
-
-    @Override
-    public void finalize() throws Throwable {
-        m_prices = null;
-        m_expansionAcronyms = null;
-        m_db = null;
-        super.finalize();
-    }
-
-    private void initAcronyms() {
-        c_File file = new c_File();
-        try {
-            file.read( this.getClass(), this, Action.ACTION_ACRONYMS_LOAD_LINE, ACRONYMS_FILE, true );
-        } catch (IOException ex) {
-            Logger.getLogger(c_PriceDB.class.getName()).log(Level.SEVERE, "Acronyms could not be loaded!", ex);
-        }
-        file = null;
-        //System.gc();
     }
 
     public void actionPerformed( ActionEvent e ) {
@@ -96,8 +78,8 @@ public class c_PriceDB implements ActionListener {
                 expansion = str.middleOf( "(", temp, ")" );
                 name = str.leftOf( temp, " (" );
 
-                if( m_expansionAcronyms.containsKey( expansion ) ) {
-                    expansion = m_expansionAcronyms.get( expansion );
+                if( m_expansionDB.contains( Acronym.Trader, expansion ) ) {
+                    expansion = m_expansionDB.getExpansion( Acronym.Trader, expansion ).getName();
                 } else {
                     expansion = "";
                 }
@@ -126,19 +108,6 @@ public class c_PriceDB implements ActionListener {
             name = null;
             expansion = null;
             temp = null;
-
-        } else if( e.getID() == Action.ACTION_ACRONYMS_LOAD_LINE ) {
-            if( parsedFirstLineAcronyms == false ) {
-                parsedFirstLineAcronyms = true;
-                return;
-            } else if( line.charAt( 0 ) == '?' ) {
-                return;
-            }
-
-            String ary[] = line.split( "\t" );
-            m_expansionAcronyms.put( ary[0], ary[1] );
-
-            ary = null;
         }
 
         line = null;
@@ -156,12 +125,11 @@ public class c_PriceDB implements ActionListener {
     public void updatePrices( String filepath ) {
         c_File file = new c_File();
         try {
-            file.read(this.getClass(), this, Action.ACTION_PRICES_LOAD_LINE, filepath, false);
+            file.read( this.getClass(), this, Action.ACTION_PRICES_LOAD_LINE, filepath, false );
         } catch (IOException ex) {
             Logger.getLogger(c_PriceDB.class.getName()).log(Level.SEVERE, "Prices could not be loaded from disk!", ex);
         }
         file = null;
-        //System.gc();
     }
 
     public boolean contains( String cardname ) {
@@ -205,8 +173,6 @@ public class c_PriceDB implements ActionListener {
                 cardprice = null;
             }
         }
-
-        //System.gc();
         return price;
     }
 }
