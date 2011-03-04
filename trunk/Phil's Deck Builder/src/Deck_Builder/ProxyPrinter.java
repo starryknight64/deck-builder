@@ -21,13 +21,12 @@ import java.awt.print.Paper;
 import java.awt.print.Printable;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import Deck_Builder.CardTable.ProxiesTableModel;
 import Deck_Builder.CardTable.ProxiesTableModel.ProxyCols;
 import Deck_Builder.c_Deck.WhichHalf;
-import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
@@ -78,8 +77,7 @@ public class ProxyPrinter extends JPanel implements Pageable {
     public ProxyPrinter( c_Deck deck, c_CardDB db ) {
         initComponents();
         m_deck = deck;
-        m_cards = m_deck.getCards();
-        m_cards.putAll( m_deck.getSBCards() );
+        m_cards = m_deck.getAllCards();
         m_db = db;
         addDeckHalf( m_deck.getCards(), WhichHalf.DECK );
         addDeckHalf( m_deck.getSBCards(), WhichHalf.SB );
@@ -474,17 +472,17 @@ public class ProxyPrinter extends JPanel implements Pageable {
                 return NO_SUCH_PAGE;
             }
             try {
-                Image img = ImageIO.read( new File( "c:\\fdsa.png" ) ); //db.getCard( mid ).getImage();
-                int height = (int)pf.getImageableHeight();
-                int width = (int)pf.getImageableWidth();
+                //Image img = ImageIO.read( new File( "c:\\fdsa.png" ) ); //db.getCard( mid ).getImage();
+                //int height = (int)pf.getImageableHeight();
+                //int width = (int)pf.getImageableWidth();
                 int cnt = 0;
                 for( int i=0; i<CARDS_PER_PAGE_VERT; i++ ) {
                     for( int j=0; j<CARDS_PER_PAGE_HORZ; j++ ) {
                         int x = (j * (CARD_WIDTH_PX  + CARD_SPACER_HORZ)) + CARD_SPACER_HORZ;
                         int y = (i * (CARD_HEIGHT_PX + CARD_SPACER_VERT)) + CARD_SPACER_VERT;
-                        //int mid = m_cards.get( cnt );
-                        //Image img = m_db.getCard( mid ).getImage();
-                        g.drawImage( img.getScaledInstance( CARD_WIDTH_PX, CARD_HEIGHT_PX, Image.SCALE_SMOOTH ), x, y, null );
+                        int mid = m_cards.get( cnt );
+                        ImageIcon img = m_db.getCard( mid ).getImage();
+                        g.drawImage( img.getImage().getScaledInstance( CARD_WIDTH_PX, CARD_HEIGHT_PX, Image.SCALE_SMOOTH ), x, y, null );
                         cnt++;
                         if( cnt >= CARDS_PER_PAGE || cnt >= m_cards.size() ) {
                             break;
