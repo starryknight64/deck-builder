@@ -340,6 +340,11 @@ public class c_Deck implements ActionListener {
     public HashMap<Integer, Integer> getSBCards() {
         return (HashMap<Integer, Integer>)m_SBcards.clone();
     }
+    public HashMap<Integer, Integer> getAllCards() {
+        HashMap<Integer, Integer> cards = getCards();
+        cards.putAll( getSBCards() );
+        return cards;
+    }
 
     public void addActionListener( ActionListener listener ) {
         m_listeners.add( ActionListener.class, listener );
