@@ -5,6 +5,7 @@
 
 package Deck_Builder;
 
+import Deck_Builder.c_CardDB.DBCol;
 import java.awt.Image;
 import java.io.File;
 import java.net.URL;
@@ -36,19 +37,37 @@ public class c_Card {
         CastingCost = new c_CastingCost();
         Expansion = "";
         MID = 0;
-//        Price = new c_Price();
     }
 
-    @Override
-    public void finalize() throws Throwable {
-        Name = null;
-        Type = null;
-        SubType = null;
-        PT = null;
-        CastingCost = null;
-        Expansion = null;
-        MID = null;
-        super.finalize();
+    public c_Card( String[] dbRow ) {
+        if( dbRow.length != DBCol.values().length ) {
+            int i =0;
+            return;
+        }
+        Name = dbRow[ DBCol.Name.val ];
+        if( Name.contains( "," ) ) {
+            Name = Name.substring( 1, Name.length() - 1 );
+        }
+
+        String type = dbRow[ DBCol.Type.val ];
+        if( type.contains( " - " ) ) {
+            String ary[] = type.split( " - " );
+            Type = ary[ 0 ];
+            SubType = ary[ 1 ];
+        } else {
+            Type = type;
+            SubType = "";
+        }
+
+        String p = dbRow[ DBCol.Power.val ];
+        String t = dbRow[ DBCol.Toughness.val ];
+        if( p.length() > 0 && t.length() > 0 ) {
+            PT = p + "/" + t;
+        }
+
+        CastingCost = new c_CastingCost( c_CastingCost.tokenize( dbRow[ DBCol.Cost.val ] ) );
+        Expansion = dbRow[ DBCol.Expansion.val ];
+        MID = Integer.parseInt( dbRow[ DBCol.MID.val ] );
     }
 
     public void setCard( c_Card card ) {
@@ -59,7 +78,6 @@ public class c_Card {
         CastingCost = card.CastingCost;
         Expansion = card.Expansion;
         MID = card.MID;
-        //Price = card.Price;
     }
 
     public ImageIcon getImage() {

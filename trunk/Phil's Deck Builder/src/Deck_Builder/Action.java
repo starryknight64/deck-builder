@@ -22,11 +22,13 @@ public class Action {
     public static final Integer ACTION_FILE_LOAD_DONE       = ActionEvent.ACTION_FIRST + 8;
     public static final Integer ACTION_CARD_PREVIEW         = ActionEvent.ACTION_FIRST + 9;
     public static final Integer ACTION_PROXY_CARD_SELECTED  = ActionEvent.ACTION_FIRST + 10;
+    public static final Integer ACTION_EXPANSION_LOAD_LINE  = ActionEvent.ACTION_FIRST + 11;
+    public static final Integer ACTION_CARDS_DB_LOAD_LINE   = ActionEvent.ACTION_FIRST + 12;
 
     //public static final String COMMAND_CARD_PREVIEW    = "LoadCard";
     public static final String COMMAND_DECK_NAME_CHANGED    = "DeckNameChanged";
     public static final String COMMAND_CURRENT_DECK_CHANGED = "CurrentDeckChanged";
-    public static final String COMMAND_FILE_LOAD_DONE       = "DeckLoadDone";
+    public static final String COMMAND_FILE_LOAD_DONE       = "FileLoadDone";
     public static final String COMMAND_CARD_PREVIEW         = "PreviewCard";
 
     private Integer m_action;

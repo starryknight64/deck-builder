@@ -89,14 +89,14 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         init();
         m_deck.addActionListener( this );
     }
-    DeckTabPanel( c_CardDB db, c_PriceDB pdb ) {
+    public DeckTabPanel( c_CardDB db, c_PriceDB pdb ) {
         m_db = db;
         m_priceDB = pdb;
         initComponents();
         init();
         m_deck.addActionListener( this );
     }
-    DeckTabPanel( String deckfilepath, c_CardDB db, c_PriceDB pdb ) {
+    public DeckTabPanel( String deckfilepath, c_CardDB db, c_PriceDB pdb ) {
         m_db = db;
         m_priceDB = pdb;
         initComponents();

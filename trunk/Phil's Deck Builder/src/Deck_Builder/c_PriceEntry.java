@@ -13,16 +13,10 @@ import java.util.HashMap;
  */
 public class c_PriceEntry extends c_Price {
                   //Expansion is String (Gatherer's full version--not the acronym)
-    private HashMap<String, c_Price> m_prices = new HashMap<String, c_Price>();
+    private HashMap<Integer, c_Price> m_prices = new HashMap<Integer, c_Price>();
 
     c_PriceEntry() {
         super();
-    }
-
-    @Override
-    public void finalize() throws Throwable {
-        m_prices = null;
-        super.finalize();
     }
 
     public void addPriceEntry( c_Price price ) {
@@ -38,18 +32,18 @@ public class c_PriceEntry extends c_Price {
 
         if( !expansion.equals( "" ) ) {
             if( !hasPrice ) {
-                m_prices.put( expansion, price );
+                m_prices.put( expansion.hashCode(), price );
             }
         }
     }
     
     public boolean contains( String expansion ) {
-        return m_prices.containsKey( expansion );
+        return m_prices.containsKey( expansion.hashCode() );
     }
     
     public c_Price getPrice( String expansion ) {
         if( contains( expansion ) ) {
-            return m_prices.get( expansion );
+            return m_prices.get( expansion.hashCode() );
         }
         return this;
     }

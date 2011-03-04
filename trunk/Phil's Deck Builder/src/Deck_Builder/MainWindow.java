@@ -11,6 +11,8 @@
 
 package Deck_Builder;
 
+import Parsers.DeckFormat;
+import Parsers.DeckFormats;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -242,15 +244,9 @@ public class MainWindow extends JFrame implements ActionListener {
         if( m_leftPanel.getTotalDecks() < LeftPanel.MAX_DECKS ) {
             JFileChooser dlg = new JFileChooser();
             dlg.setDialogTitle( "Open Deck..." );
-            dlg.setFileFilter( new FileFilter() {
-                public boolean accept( File f ) {
-                    return( f.getName().toLowerCase().endsWith(".tsv") || f.isDirectory() );
-                }
-
-                public String getDescription() {
-                    return "Deck Files (*.tsv)";
-                }
-            });
+            dlg.addChoosableFileFilter( DeckFormats.Apprentice.getDeckFormat() );
+            dlg.addChoosableFileFilter( DeckFormats.PhilsDeckBuilder.getDeckFormat() );
+            
             int cmd = dlg.showOpenDialog( this );
 
             if( cmd == JFileChooser.APPROVE_OPTION ) {
@@ -278,21 +274,22 @@ public class MainWindow extends JFrame implements ActionListener {
         boolean saveSuccess = true;
         int cmd = JFileChooser.CANCEL_OPTION;
         String filepath = deck.getFilename();
+        FileFilter filter = DeckFormats.PhilsDeckBuilder.getDeckFormat();
         if( isSaveAs ) {
             JFileChooser dlg = new JFileChooser();
             try {
                 dlg.setDialogTitle( "Save Deck" + ( isSaveAs ? " As..." : "..." ) );
-                dlg.setSelectedFile( new File( ".\\" + deck.getDeckName() + ".tsv" ) );
-                dlg.setFileFilter( new FileFilter() {
-                    public boolean accept( File f ) {
-                        return( f.getName().toLowerCase().endsWith(".tsv") || f.isDirectory() );
-                    }
+                dlg.setSelectedFile( new File( ".\\" + c_File.removeInvalidFilenameChars( deck.getDeckName() ) + ".tsv" ) );
+                dlg.setAcceptAllFileFilterUsed( false );
+                dlg.addChoosableFileFilter( DeckFormats.Apprentice.getDeckFormat() );
+                dlg.addChoosableFileFilter( DeckFormats.PhilsDeckBuilder.getDeckFormat() );
 
-                    public String getDescription() {
-                        return "Deck Files (*.tsv)";
-                    }
-                });
                 cmd = dlg.showSaveDialog( this );
+                if( cmd != JFileChooser.APPROVE_OPTION ) {
+                    dlg = null;
+                    return false;
+                }
+                filter = dlg.getFileFilter();
                 filepath = dlg.getSelectedFile().getCanonicalPath();
             } catch( Exception ex ) {
                 Dialog.ErrorBox( this, ex.getStackTrace() );
@@ -304,14 +301,12 @@ public class MainWindow extends JFrame implements ActionListener {
         }
 
         if( cmd == JFileChooser.APPROVE_OPTION || !isSaveAs ) {
-            String fname = filepath;
-            if( !fname.toLowerCase().endsWith( ".tsv" ) ) {
-                fname += ".tsv";
-            }
+//            String fname = filepath;
+//            if( !fname.toLowerCase().endsWith( ".tsv" ) ) {
+//                fname += ".tsv";
+//            }
 
-            saveSuccess = deck.saveDeck( fname );
-        } else if( cmd != JFileChooser.APPROVE_OPTION ) {
-            saveSuccess = false;
+            saveSuccess = ((DeckFormat)filter).saveDeck( filepath, m_leftPanel.getCurrentDeckTab().getDeck(), m_db ); //deck.saveDeck( fname );
         }
 
         if( saveSuccess ) {
