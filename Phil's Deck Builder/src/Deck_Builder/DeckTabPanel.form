@@ -65,7 +65,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javaapplication4.CardTable" name="m_MainDeck_Table">
+                <Component class="Deck_Builder.CardTable" name="m_MainDeck_Table">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="m_deckCTM" type="code"/>
@@ -111,7 +111,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javaapplication4.CardTable" name="m_Sideboard_Table">
+                <Component class="Deck_Builder.CardTable" name="m_Sideboard_Table">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                       <Connection code="m_sbCTM" type="code"/>
@@ -764,7 +764,7 @@
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
                   <SubComponents>
-                    <Component class="javaapplication4.CardTable" name="m_Misc_PricesTable">
+                    <Component class="Deck_Builder.CardTable" name="m_Misc_PricesTable">
                       <Properties>
                         <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
                           <Connection code=" m_priceCTM " type="code"/>
