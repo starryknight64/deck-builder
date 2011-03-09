@@ -5,9 +5,9 @@
 
 package Parsers;
 
-import Deck_Builder.c_CardDB;
-import Deck_Builder.c_Deck;
-import Deck_Builder.c_File;
+import Data.c_CardDB;
+import Data.c_Deck;
+import Data.c_File;
 import java.io.File;
 import javax.swing.filechooser.FileFilter;
 

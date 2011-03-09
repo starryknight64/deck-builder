@@ -3,8 +3,9 @@
  * and open the template in the editor.
  */
 
-package Deck_Builder;
+package Data;
 
+import Deck_Builder.Action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;

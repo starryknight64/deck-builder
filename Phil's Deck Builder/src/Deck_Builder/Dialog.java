@@ -14,24 +14,24 @@ import javax.swing.JOptionPane;
  */
 public class Dialog {
 
-    static void MsgBox( JFrame frame, String message ) {
+    public static void MsgBox( JFrame frame, String message ) {
         JOptionPane.showMessageDialog( frame, message );
     }
-    static void MsgBox( JFrame frame, String title, String message ) {
+    public static void MsgBox( JFrame frame, String title, String message ) {
         JOptionPane.showMessageDialog( frame, message, title, JOptionPane.INFORMATION_MESSAGE );
     }
-    static int MsgBox( JFrame frame, String title, String message, int options ) {
+    public static int MsgBox( JFrame frame, String title, String message, int options ) {
         return JOptionPane.showConfirmDialog( frame, message, title, options );
     }
-    static int MsgBox( JFrame frame, String title, String message, int options, int type ) {
+    public static int MsgBox( JFrame frame, String title, String message, int options, int type ) {
         return JOptionPane.showConfirmDialog( frame, message, title, options, type );
     }
 
-    static String InputBox( JFrame frame, String message, String default_str ) {
+    public static String InputBox( JFrame frame, String message, String default_str ) {
         return JOptionPane.showInputDialog( frame, message, default_str );
     }
 
-    static void ErrorBox( JFrame frame, StackTraceElement[] stack_trace ) {
+    public static void ErrorBox( JFrame frame, StackTraceElement[] stack_trace ) {
         String message = "";
         for( int i=0; i<stack_trace.length && i<10; i++ ) {
             message += stack_trace[ i ] + "\n";

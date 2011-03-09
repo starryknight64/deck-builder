@@ -9,13 +9,20 @@
  * Created on Nov 2, 2010, 7:25:48 PM
  */
 
-package Deck_Builder;
+package GUI;
 
+import Deck_Builder.Dialog;
+import Deck_Builder.Action;
+import Data.c_PriceDB;
+import Data.c_ExpansionDB;
+import Data.c_CardDB;
+import Data.c_Deck;
+import Data.c_Card;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
-import Deck_Builder.CardTable.RecentlyViewedTableModel;
+import GUI.CardTable.RecentlyViewedTableModel;
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
@@ -185,7 +192,7 @@ public class LeftPanel extends JPanel implements ActionListener {
 
         m_RecentlyViewed_Panel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        m_RecentlyViewed_Table = new Deck_Builder.CardTable();
+        m_RecentlyViewed_Table = new GUI.CardTable();
         m_CardPreview_Panel = new javax.swing.JPanel();
         m_CardPreview_AddCard = new javax.swing.JPanel();
         m_AddCard_Amount = new javax.swing.JComboBox();
@@ -452,7 +459,7 @@ public class LeftPanel extends JPanel implements ActionListener {
     private javax.swing.JTabbedPane m_DeckTabs;
     private javax.swing.JPanel m_DeckTabs_NewDeck;
     private javax.swing.JPanel m_RecentlyViewed_Panel;
-    private Deck_Builder.CardTable m_RecentlyViewed_Table;
+    private GUI.CardTable m_RecentlyViewed_Table;
     // End of variables declaration//GEN-END:variables
 
 }

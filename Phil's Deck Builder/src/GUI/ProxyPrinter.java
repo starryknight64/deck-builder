@@ -9,8 +9,12 @@
  * Created on Feb 19, 2011, 8:26:01 AM
  */
 
-package Deck_Builder;
+package GUI;
 
+import Deck_Builder.Action;
+import Data.c_CardDB;
+import Data.c_Card;
+import Data.c_Deck;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
@@ -23,9 +27,9 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.util.ArrayList;
 import java.util.HashMap;
-import Deck_Builder.CardTable.ProxiesTableModel;
-import Deck_Builder.CardTable.ProxiesTableModel.ProxyCols;
-import Deck_Builder.c_Deck.WhichHalf;
+import GUI.CardTable.ProxiesTableModel;
+import GUI.CardTable.ProxiesTableModel.ProxyCols;
+import Data.c_Deck.WhichHalf;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
@@ -141,7 +145,7 @@ public class ProxyPrinter extends JPanel implements Pageable {
         m_selectEachButton = new javax.swing.JButton();
         m_selectEachText = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        m_proxyTable = new Deck_Builder.CardTable();
+        m_proxyTable = new GUI.CardTable();
         m_printButton = new javax.swing.JButton();
 
         setMinimumSize(new java.awt.Dimension(303, 316));
@@ -489,7 +493,7 @@ public class ProxyPrinter extends JPanel implements Pageable {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JButton m_cancelButton;
     private javax.swing.JButton m_printButton;
-    private Deck_Builder.CardTable m_proxyTable;
+    private GUI.CardTable m_proxyTable;
     private javax.swing.JButton m_selectAllButton;
     private javax.swing.JButton m_selectEachButton;
     private javax.swing.JTextField m_selectEachText;

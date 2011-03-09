@@ -39,12 +39,12 @@ public class Action {
     private Integer m_action;
     private String m_command;
 
-    Action() {
+    public Action() {
         m_action = ACTION_INVALID;
         m_command = "";
     }
 
-    Action( Integer action, String command ) {
+    public Action( Integer action, String command ) {
         m_action = action;
         m_command = command;
     }

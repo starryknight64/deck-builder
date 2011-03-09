@@ -1,0 +1,37 @@
+--Mirrodin
+--Banned
+AEther Vial
+Ancient Den
+Arcbound Ravager
+Darksteel Citadel
+Disciple of the Vault
+Great Furnace
+Seat of the Synod
+Tree of Tales
+Vault of Whispers
+Skullclamp
+--Masques
+--Banned
+Lin Sivvi, Defiant Hero
+Rishadan Port
+--Urza
+--Banned
+Gaea’s Cradle
+Memory Jar
+Serra’s Sanctum
+Time Spiral
+Tolarian Academy
+Voltaic Key
+Windfall
+--Tempest
+--Banned
+Cursed Scroll
+--Mirage
+--Banned
+Squandered Resources
+--Ice Age
+--Banned
+Amulet of Quoz
+Thawing Glaciers
+Zuran Orb
+--http://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrblock

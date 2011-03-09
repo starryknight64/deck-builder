@@ -3,8 +3,13 @@
  * and open the template in the editor.
  */
 
-package Deck_Builder;
+package GUI;
 
+import Deck_Builder.Dialog;
+import Deck_Builder.str;
+import Deck_Builder.Action;
+import Data.c_CastingCost;
+import Data.c_Card;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
