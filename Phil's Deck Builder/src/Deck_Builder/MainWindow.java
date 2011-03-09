@@ -21,6 +21,7 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.util.ArrayList;
+import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -33,6 +34,19 @@ import javax.swing.filechooser.FileFilter;
 public class MainWindow extends JFrame implements ActionListener {
     private c_Card m_curCard;
     private c_CardDB m_db;
+    private CustomSplashScreen screen;
+    private String[] m_loadingText = new String[] { "Loading Expansions...",
+                                                    "Loading Block Legality...",
+                                                    "Loading Standard Legality...",
+                                                    "Loading Extended Legality...",
+                                                    "Loading Legacy Legality...",
+                                                    "Loading Vintage Legality...",
+                                                    "Loading Cards...",
+                                                    "Downloading Prices...",
+                                                    "Loading Prices...",
+                                                    "Done!" };
+    private int m_loadingIndex = 0;
+    private int m_totalLines = 100;
 
     /** Creates new form MainWindow */
     public MainWindow() {
@@ -44,7 +58,7 @@ public class MainWindow extends JFrame implements ActionListener {
             public void windowClosing( WindowEvent e ) {
                 int success = closeDecks( m_leftPanel.getAllDecks() );
                 if( success == JOptionPane.CANCEL_OPTION ) {
-                    // if, during the close, the user decided to cancel, then don't exit the program
+                    /* if, during the close, the user decided to cancel, then don't exit the program */
                     return;
                 }
                 dispose();
@@ -59,16 +73,28 @@ public class MainWindow extends JFrame implements ActionListener {
         jSplitPane1.setDividerLocation( (int)(getWidth() * 0.5) - jSplitPane1.getDividerSize() );
         m_webBrowserPanel.giveFrame( this );
         m_webBrowserPanel.addActionListener( this );
-        m_webBrowserPanel.load( "http://gatherer.wizards.com/Pages/Default.aspx" );
+        m_webBrowserPanel.load( "http://gatherer.wizards.com" );
         m_curCard = new c_Card();
         m_leftPanel.addActionListener( this );
-        m_db = m_leftPanel.getCardDB();
+
+        screen = new CustomSplashScreen( new ImageIcon( "logo.png" ) );
+        screen.setLocationRelativeTo( null );
+        screen.setScreenVisible( true );
+        boolean success = m_leftPanel.loadDBs( this );
+        screen.setScreenVisible( false );
+        screen = null;
         
-        dim = null;
-        //System.gc();
+        m_db = m_leftPanel.getCardDB();
+
+        setVisible( true );
+        if( success == false ) {
+            Dialog.MsgBox( this, "There was an error initializing the deck builder. It is recommended you restart to avoid further errors." );
         }
 
-    public void actionPerformed(ActionEvent e) {
+        dim = null;
+        }
+
+    public void actionPerformed( ActionEvent e ) {
         if( e.getID() == Action.ACTION_BROWSER_LOADING_DONE ) {
             if( Action.COMMAND_CARD_PREVIEW.equals( e.getActionCommand() ) ) {
                 m_curCard = m_webBrowserPanel.getCard();
@@ -80,9 +106,20 @@ public class MainWindow extends JFrame implements ActionListener {
             m_File_CloseDeck.setEnabled( m_leftPanel.getTotalDecks() > 1 || !isSaved );
         } else if( e.getID() == Action.ACTION_PROXY_CARD_SELECTED ) {
             int mid = Integer.parseInt( e.getActionCommand() );
-            //c_CardDB db = this.m_leftPanel.getCardDB();
             m_curCard = m_db.getCard( mid );
             m_leftPanel.setPreviewCard( m_curCard );
+        } else if( e.getID() == Action.ACTION_FILE_TOTAL_LINES ) {
+            if( screen != null ) {
+                m_totalLines = Integer.parseInt( e.getActionCommand() );
+                screen.setProgressMax( m_totalLines );
+            }
+        } else if( e.getID() == Action.ACTION_FILE_LOAD_DONE ) {
+            if( screen != null ) {
+                screen.setProgress( m_loadingText[ m_loadingIndex++ ], m_totalLines );
+                screen.setProgress( m_loadingText[ m_loadingIndex ], 0 );
+            }
+        } else if( screen != null ) {
+            screen.setProgress( m_loadingText[ m_loadingIndex ], screen.getProgress() + 1 );
         }
     }
 
@@ -129,9 +166,11 @@ public class MainWindow extends JFrame implements ActionListener {
 
         jSplitPane1.setLeftComponent(jScrollPane2);
 
+        jMenu3.setMnemonic('F');
         jMenu3.setText("File");
 
         m_File_NewDeck.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_N, java.awt.event.InputEvent.CTRL_MASK));
+        m_File_NewDeck.setMnemonic('N');
         m_File_NewDeck.setText("New Deck");
         m_File_NewDeck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -142,6 +181,7 @@ public class MainWindow extends JFrame implements ActionListener {
         jMenu3.add(jSeparator1);
 
         m_File_OpenDeck.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.CTRL_MASK));
+        m_File_OpenDeck.setMnemonic('O');
         m_File_OpenDeck.setText("Open Deck...");
         m_File_OpenDeck.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -151,6 +191,7 @@ public class MainWindow extends JFrame implements ActionListener {
         jMenu3.add(m_File_OpenDeck);
 
         m_File_SaveDeck.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.CTRL_MASK));
+        m_File_SaveDeck.setMnemonic('S');
         m_File_SaveDeck.setText("Save Deck");
         m_File_SaveDeck.setEnabled(false);
         m_File_SaveDeck.addActionListener(new java.awt.event.ActionListener() {
@@ -161,6 +202,7 @@ public class MainWindow extends JFrame implements ActionListener {
         jMenu3.add(m_File_SaveDeck);
 
         m_File_SaveDeckAs.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.SHIFT_MASK | java.awt.event.InputEvent.CTRL_MASK));
+        m_File_SaveDeckAs.setMnemonic('A');
         m_File_SaveDeckAs.setText("Save Deck As...");
         m_File_SaveDeckAs.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -171,6 +213,7 @@ public class MainWindow extends JFrame implements ActionListener {
         jMenu3.add(jSeparator2);
 
         m_File_CloseDeck.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_F4, java.awt.event.InputEvent.CTRL_MASK));
+        m_File_CloseDeck.setMnemonic('C');
         m_File_CloseDeck.setText("Close Deck");
         m_File_CloseDeck.setEnabled(false);
         m_File_CloseDeck.addActionListener(new java.awt.event.ActionListener() {
@@ -180,6 +223,7 @@ public class MainWindow extends JFrame implements ActionListener {
         });
         jMenu3.add(m_File_CloseDeck);
 
+        m_File_CloseAllDecks.setMnemonic('D');
         m_File_CloseAllDecks.setText("Close All Decks...");
         m_File_CloseAllDecks.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -189,6 +233,7 @@ public class MainWindow extends JFrame implements ActionListener {
         jMenu3.add(m_File_CloseAllDecks);
 
         m_File_PrintProxies.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_P, java.awt.event.InputEvent.CTRL_MASK));
+        m_File_PrintProxies.setMnemonic('P');
         m_File_PrintProxies.setText("Print Proxies...");
         m_File_PrintProxies.setToolTipText("Coming Soon!");
         m_File_PrintProxies.addActionListener(new java.awt.event.ActionListener() {
@@ -199,6 +244,7 @@ public class MainWindow extends JFrame implements ActionListener {
         jMenu3.add(m_File_PrintProxies);
         jMenu3.add(jSeparator3);
 
+        m_File_Exit.setMnemonic('x');
         m_File_Exit.setText("Exit");
         m_File_Exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -209,6 +255,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
         jMenuBar1.add(jMenu3);
 
+        jMenu2.setMnemonic('E');
         jMenu2.setText("Edit");
 
         jMenuItem7.setText("Preferences...");
@@ -258,7 +305,6 @@ public class MainWindow extends JFrame implements ActionListener {
             }
 
             dlg = null;
-            //System.gc();
         } else {
             Dialog.MsgBox( this, "You have too many decks open. The maximum allowed is " + LeftPanel.MAX_DECKS.toString() + ". Close a deck first and then try to open a deck." );
         }
@@ -301,12 +347,7 @@ public class MainWindow extends JFrame implements ActionListener {
         }
 
         if( cmd == JFileChooser.APPROVE_OPTION || !isSaveAs ) {
-//            String fname = filepath;
-//            if( !fname.toLowerCase().endsWith( ".tsv" ) ) {
-//                fname += ".tsv";
-//            }
-
-            saveSuccess = ((DeckFormat)filter).saveDeck( filepath, m_leftPanel.getCurrentDeckTab().getDeck(), m_db ); //deck.saveDeck( fname );
+            saveSuccess = ((DeckFormat)filter).saveDeck( filepath, m_leftPanel.getCurrentDeckTab().getDeck(), m_db );
         }
 
         if( saveSuccess ) {
@@ -365,14 +406,14 @@ public class MainWindow extends JFrame implements ActionListener {
                     m_leftPanel.addNewDeck();
                     closeDeck = ( m_leftPanel.getTotalDecks() > 1 );
                 } else {
-                    // Either user decided to cancel or had an issue with saving, so cancel the operation
+                    /* Either user decided to cancel or had an issue with saving, so cancel the operation */
                     return JOptionPane.CANCEL_OPTION;
                 }
             } else if( ans == JOptionPane.NO_OPTION ) {
                 m_leftPanel.addNewDeck();
                 closeDeck = ( m_leftPanel.getTotalDecks() > 1 );
             } else if( ans == JOptionPane.CANCEL_OPTION || ans == JOptionPane.CLOSED_OPTION ) {
-                // Cancel the operation
+                /* Cancel the operation */
                 return JOptionPane.CANCEL_OPTION;
             }
 

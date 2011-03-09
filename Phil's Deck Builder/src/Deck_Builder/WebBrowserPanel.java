@@ -122,7 +122,6 @@ public class WebBrowserPanel extends MozillaPanel {
             }
         }
         m_loading = false;
-        //System.gc();
     }
 
     public static String getCardImageURL( Integer MID ) {
@@ -143,7 +142,7 @@ public class WebBrowserPanel extends MozillaPanel {
                 if( line.contains( "multiverseid=" ) && m_card.MID == 0 ) {
                     foundCard = true;
                     m_card.MID = Integer.parseInt( str.middleOf( "multiverseid=", line, "\" id=" ) );
-                    i += 300; // help out the parser a little
+                    i += 300; /* help out the parser a little */
                 } else if( line.contains( "Card Name:" ) ) {
                     i += 2;
                     m_card.Name = str.leftOf( m_content.get( i ), "</div>" ).trim();
@@ -159,7 +158,7 @@ public class WebBrowserPanel extends MozillaPanel {
 
                     m_card.CastingCost = new c_CastingCost( glyphs.substring( 0, glyphs.length() - 1 ) );
                     
-                    i += 5; // skip over converted mana cost
+                    i += 5; /* skip over converted mana cost */
                     
                     glyphs = null;
                 } else if( line.contains( "Types:" ) ) {
@@ -181,7 +180,7 @@ public class WebBrowserPanel extends MozillaPanel {
                     i += 4;
                     line = m_content.get( i );
                     m_card.Expansion = str.middleOf( ">", line, "</a>" );
-                    break; // nothing left of interest
+                    break; /* nothing left of interest */
                 }
             }
             
@@ -192,9 +191,6 @@ public class WebBrowserPanel extends MozillaPanel {
             action = new Action( Action.ACTION_BROWSER_LOADING_DONE, Action.COMMAND_CARD_PREVIEW );
         }
 
-//this.getDocument().getDocumentURI()
-        //http://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=21315&type=card
-        //System.gc();
         return action;
     }
 
@@ -203,14 +199,10 @@ public class WebBrowserPanel extends MozillaPanel {
         for( int i=listeners.length-1; i>=0; i-- ) {
             if( listeners[i].getClass() == thisClass ) {
                 ((ActionListener)listeners[i]).actionPerformed( new ActionEvent( this, action, command ) );
-
-                //System.gc();
                 listeners = null;
                 return;
             }
         }
-
-        //System.gc();
         listeners = null;
     }
 }

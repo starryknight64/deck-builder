@@ -12,7 +12,7 @@ import java.util.HashMap;
  * @author Phillip
  */
 public class c_PriceEntry extends c_Price {
-                  //Expansion is String (Gatherer's full version--not the acronym)
+                 /* Expansion is String (Gatherer's full version--not the acronym) */
     private HashMap<Integer, c_Price> m_prices = new HashMap<Integer, c_Price>();
 
     c_PriceEntry() {
@@ -26,7 +26,7 @@ public class c_PriceEntry extends c_Price {
         boolean hasPrice = contains( expansion );
 
         if( (!hasPrice && !expansion.equals( "" ))
-            || m_prices.isEmpty() ) { //Add price to the average
+            || m_prices.isEmpty() ) { /* Add price to the average */
             super.addPrice( price );
         }
 
