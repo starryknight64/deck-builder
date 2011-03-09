@@ -20,7 +20,10 @@ import Deck_Builder.CardTable.DeckTableModel;
 import Deck_Builder.CardTable.PricesTableModel;
 import Deck_Builder.c_Deck.CardLoading;
 import Deck_Builder.c_Deck.WhichHalf;
+import Deck_Builder.c_Deck.WhichType;
+import Deck_Builder.c_ExpansionDB.Legals;
 import Deck_Builder.c_Price.PriceType;
+import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -46,6 +49,7 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         SORCERIES,
         INSTANTS,
         LANDS;
+        public int val = this.ordinal();
     }
     private JTextField[] m_DeckInfoText;
 
@@ -53,7 +57,8 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         MAINDECK,
         SIDEBOARD,
         DECKINFO,
-        MISC
+        MISC;
+        public int val = this.ordinal();
     }
 
     private EventListenerList m_listeners = new EventListenerList();
@@ -69,17 +74,6 @@ public class DeckTabPanel extends JPanel implements ActionListener {
     private String m_filename = "";
 
     private c_Deck m_deck = new c_Deck();
-
-    @Override
-    public void finalize() throws Throwable {
-        m_listeners = null;
-        m_deckCTM = null;
-        m_sbCTM = null;
-        m_priceCTM = null;
-        m_db = null;
-        m_priceDB = null;
-        super.finalize();
-    }
 
     /** Creates new form DeckTabPanel */
     public DeckTabPanel() {
@@ -97,6 +91,7 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         m_deck.addActionListener( this );
     }
     public DeckTabPanel( String deckfilepath, c_CardDB db, c_PriceDB pdb ) {
+        super();
         m_db = db;
         m_priceDB = pdb;
         initComponents();
@@ -104,6 +99,7 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         m_deck.addActionListener( this );
         m_deck.loadDeckFromFile( deckfilepath );
         m_filename = deckfilepath;
+        m_Misc_NotesText.setText( m_deck.getNotes() );
     }
     
     private void init() {
@@ -122,9 +118,6 @@ public class DeckTabPanel extends JPanel implements ActionListener {
             m_Properties_InstantsText,
             m_Properties_LandsText
         };
-//        this.m_MainDeck_Table.setAutoCreateRowSorter(true);
-//        this.m_Sideboard_Table.setAutoCreateRowSorter(true);
-//        this.m_Misc_PricesTable.setAutoCreateRowSorter(true);
 
         updateDeckInfo();
     }
@@ -150,12 +143,13 @@ public class DeckTabPanel extends JPanel implements ActionListener {
     }
     
     public void addCard( c_Card card, Integer amount ) {
-        boolean toDeck = (m_DeckTabPane.getSelectedIndex() != DeckTab.SIDEBOARD.ordinal());
+        boolean toDeck = (m_DeckTabPane.getSelectedIndex() != DeckTab.SIDEBOARD.val);
         addCard( card, amount, toDeck );
     }
     public void addCard( c_Card card, Integer amount, boolean toDeck ) {
         DeckTableModel dtm = toDeck ? m_deckCTM : m_sbCTM;
-        Integer row = dtm.getMIDRow( card.MID );//.findValueInColumn( card.MID, DeckTableModel.DeckCols.MID.val );
+        CardTable table = toDeck ? m_MainDeck_Table : m_Sideboard_Table;
+        Integer row = dtm.getMIDRow( card.MID );
         Integer cur_amt = m_deck.getAmountOfCard( card.MID, toDeck ? WhichHalf.DECK : WhichHalf.SB );
         Integer new_amt = amount + cur_amt;
         
@@ -173,6 +167,10 @@ public class DeckTabPanel extends JPanel implements ActionListener {
             dtm.updateCardAmount( card, new_amt );
             m_priceCTM.updateCardAmount( card, new_amt, toDeck );
         }
+        row = table.convertRowIndexToView( dtm.getMIDRow( card.MID ) );
+//        table.removeRowSelectionInterval( 0, table.getRowCount() );
+//        table.addRowSelectionInterval( row, row );
+        table.changeSelection( row, 0, false, false );
 
         if( !m_isLoading ) {
             m_isSaved = false;
@@ -181,17 +179,17 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         updateDeckInfo();
 
         dtm = null;
+        table = null;
         row = null;
         cur_amt = null;
         new_amt = null;
-        //System.gc();
     }
 
 
     public void deleteCard( c_Card card ) {
-        boolean fromDeck = (m_DeckTabPane.getSelectedIndex() != DeckTab.SIDEBOARD.ordinal());
+        boolean fromDeck = (m_DeckTabPane.getSelectedIndex() != DeckTab.SIDEBOARD.val);
         DeckTableModel dtm = fromDeck ? m_deckCTM : m_sbCTM;
-        Integer row = dtm.getMIDRow( card.MID ); //.findValueInColumn( card.MID, DeckTableModel.DeckCols.MID.val );
+        Integer row = dtm.getMIDRow( card.MID );
         
         m_deck.deleteCard( card.MID, fromDeck );
         m_priceCTM.deleteCard( card );
@@ -207,24 +205,23 @@ public class DeckTabPanel extends JPanel implements ActionListener {
 
         dtm = null;
         row = null;
-        //System.gc();
     }
 
     public void actionPerformed(ActionEvent e) {
         if( e.getID() == Action.ACTION_DECK_LOAD_CARD
             || e.getID() == Action.ACTION_DECK_SB_LOAD_LINE ) {
-            //Card Name	Amt	Card Type	Sub-Type	Cost	P/T	Set	MID
+            /* Card Name	Amt	Card Type	Sub-Type	Cost	P/T	Set	MID */
             String line = e.getActionCommand();
             String ary[] = line.split( "\t" );
             c_Card card = new c_Card();
-            Integer amount = Integer.parseInt( ary[ CardLoading.AMOUNT.ordinal() ] );
-            card.Name = ary[ CardLoading.NAME.ordinal() ];
-            card.Type = ary[ CardLoading.TYPE.ordinal() ];
-            card.SubType = ary[ CardLoading.SUBTYPE.ordinal() ];
-            card.CastingCost = new c_CastingCost( ary[ CardLoading.COST.ordinal() ] );
-            card.PT = ary[ CardLoading.PT.ordinal() ].replaceAll( "'", "" );
-            card.Expansion = ary[ CardLoading.EXPANSION.ordinal() ];
-            card.MID = Integer.parseInt( ary[ CardLoading.MID.ordinal() ] );
+            Integer amount = Integer.parseInt( ary[ CardLoading.AMOUNT.val ] );
+            card.Name = ary[ CardLoading.NAME.val ];
+            card.Type = ary[ CardLoading.TYPE.val ];
+            card.SubType = ary[ CardLoading.SUBTYPE.val ];
+            card.CastingCost = new c_CastingCost( ary[ CardLoading.COST.val ] );
+            card.PT = ary[ CardLoading.PT.val ].replaceAll( "'", "" );
+            card.Expansion = ary[ CardLoading.EXPANSION.val ];
+            card.MID = Integer.parseInt( ary[ CardLoading.MID.val ] );
 
             boolean toDeck = ( e.getID() == Action.ACTION_DECK_LOAD_CARD );
             m_isLoading = true;
@@ -240,58 +237,80 @@ public class DeckTabPanel extends JPanel implements ActionListener {
 
     public Integer getSelectedCard() {
         Integer mid = 0;
-        if( m_DeckTabPane.getSelectedIndex() != DeckTab.MISC.ordinal() ) {
-            boolean fromDeck = (m_DeckTabPane.getSelectedIndex() != DeckTab.SIDEBOARD.ordinal());
+        if( m_DeckTabPane.getSelectedIndex() != DeckTab.MISC.val ) {
+            boolean fromDeck = (m_DeckTabPane.getSelectedIndex() != DeckTab.SIDEBOARD.val);
             DeckTableModel dtm = fromDeck ? m_deckCTM : m_sbCTM;
             JTable table = fromDeck ? m_MainDeck_Table : m_Sideboard_Table;
             Integer row = table.convertRowIndexToModel( table.getSelectedRow() );
-            mid = dtm.getMID( row );//(Integer)dtm.getValueAt( row, DeckTableModel.DeckCols.MID.val );
+            mid = dtm.getMID( row );
 
             dtm = null;
             table = null;
-            //System.gc();
-        } else { // Get selected card from prices table
+        } else { /* Get selected card from prices table */
             int row = m_Misc_PricesTable.convertRowIndexToModel( m_Misc_PricesTable.getSelectedRow() );
-            mid = m_priceCTM.getMID( row ); //(Integer)m_Misc_PricesTable.getValueAt( row, PricesTableModel.PriceCols.MID.val );
+            mid = m_priceCTM.getMID( row );
         }
         
         return mid;
     }
 
     public void updateDeckInfo() {
-        m_DeckInfoText[ DeckInfo.NAME.ordinal()          ].setText( m_deck.getName() );
+        m_DeckInfoText[ DeckInfo.NAME.val          ].setText( m_deck.getName() );
 
-        if( m_DeckInfoText[ DeckInfo.NAME.ordinal() ].getText().charAt( 0 ) != this.getFormattedDeckName().charAt( 0 ) ) {
+        if( m_DeckInfoText[ DeckInfo.NAME.val ].getText().charAt( 0 ) != this.getFormattedDeckName().charAt( 0 ) ) {
             fireActionEvent( LeftPanel.class, Action.ACTION_DECK_CHANGED, Action.COMMAND_DECK_NAME_CHANGED );
         }
 
-        m_DeckInfoText[ DeckInfo.COLORS.ordinal()        ].setText( m_deck.getColorsText( m_db ) );
+        m_DeckInfoText[ DeckInfo.COLORS.val        ].setText( m_deck.getColorsText( m_db ) );
 
-        if( m_DeckInfoText[ DeckInfo.CREATIONDATE.ordinal() ].getText().equals( "" ) ) {
+        if( m_DeckInfoText[ DeckInfo.CREATIONDATE.val ].getText().equals( "" ) ) {
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat( "MMM. dd, yyyy h:mm aaa" );
             m_deck.setCreationDate( sdf.format( cal.getTime() ) );
-            m_DeckInfoText[ DeckInfo.CREATIONDATE.ordinal() ].setText( m_deck.getCreationDate() );
+            m_DeckInfoText[ DeckInfo.CREATIONDATE.val ].setText( m_deck.getCreationDate() );
 
             cal = null;
             sdf = null;
         }
 
-        m_DeckInfoText[ DeckInfo.MODIFICATIONS.ordinal() ].setText( m_deck.getModifications().toString() );
-        m_DeckInfoText[ DeckInfo.SIZE.ordinal()          ].setText( m_deck.getSizeOf( c_Deck.WhichHalf.DECK ).toString() );
-        m_DeckInfoText[ DeckInfo.SIDEBOARDSIZE.ordinal() ].setText( m_deck.getSizeOf( c_Deck.WhichHalf.SB ).toString() );
-        m_DeckInfoText[ DeckInfo.PLANESWALKERS.ordinal() ].setText( m_deck.getAmountOfType( c_Deck.WhichType.PLANESWALKERS, c_Deck.WhichHalf.BOTH, m_db ).toString() );
-        m_DeckInfoText[ DeckInfo.CREATURES.ordinal()     ].setText( m_deck.getAmountOfType( c_Deck.WhichType.CREATURES,     c_Deck.WhichHalf.BOTH, m_db ).toString() );
-        m_DeckInfoText[ DeckInfo.ARTIFACTS.ordinal()     ].setText( m_deck.getAmountOfType( c_Deck.WhichType.ARTIFACTS,     c_Deck.WhichHalf.BOTH, m_db ).toString() );
-        m_DeckInfoText[ DeckInfo.ENCHANTMENTS.ordinal()  ].setText( m_deck.getAmountOfType( c_Deck.WhichType.ENCHANTMENTS,  c_Deck.WhichHalf.BOTH, m_db ).toString() );
-        m_DeckInfoText[ DeckInfo.SORCERIES.ordinal()     ].setText( m_deck.getAmountOfType( c_Deck.WhichType.SORCERIES,     c_Deck.WhichHalf.BOTH, m_db ).toString() );
-        m_DeckInfoText[ DeckInfo.INSTANTS.ordinal()      ].setText( m_deck.getAmountOfType( c_Deck.WhichType.INSTANTS,      c_Deck.WhichHalf.BOTH, m_db ).toString() );
-        m_DeckInfoText[ DeckInfo.LANDS.ordinal()         ].setText( m_deck.getAmountOfType( c_Deck.WhichType.LANDS,         c_Deck.WhichHalf.BOTH, m_db ).toString() );
+        m_DeckInfoText[ DeckInfo.MODIFICATIONS.val ].setText( m_deck.getModifications().toString() );
+
+        m_DeckInfoText[ DeckInfo.SIZE.val          ].setText( m_deck.getSizeOf( WhichHalf.DECK ).toString() );
+        m_DeckInfoText[ DeckInfo.SIDEBOARDSIZE.val ].setText( m_deck.getSizeOf( WhichHalf.SB ).toString() );
+        m_DeckTabPane.setTitleAt( DeckTab.MAINDECK.val, "Main Deck (" + m_DeckInfoText[ DeckInfo.SIZE.val ].getText() + ")" );
+        m_DeckTabPane.setTitleAt( DeckTab.SIDEBOARD.val, "Sideboard (" + m_DeckInfoText[ DeckInfo.SIDEBOARDSIZE.val ].getText() + ")" );
+        
+        m_DeckInfoText[ DeckInfo.PLANESWALKERS.val ].setText( m_deck.getAmountOfType( WhichType.PLANESWALKERS, WhichHalf.BOTH, m_db ).toString() );
+        m_DeckInfoText[ DeckInfo.CREATURES.val     ].setText( m_deck.getAmountOfType( WhichType.CREATURES,     WhichHalf.BOTH, m_db ).toString() );
+        m_DeckInfoText[ DeckInfo.ARTIFACTS.val     ].setText( m_deck.getAmountOfType( WhichType.ARTIFACTS,     WhichHalf.BOTH, m_db ).toString() );
+        m_DeckInfoText[ DeckInfo.ENCHANTMENTS.val  ].setText( m_deck.getAmountOfType( WhichType.ENCHANTMENTS,  WhichHalf.BOTH, m_db ).toString() );
+        m_DeckInfoText[ DeckInfo.SORCERIES.val     ].setText( m_deck.getAmountOfType( WhichType.SORCERIES,     WhichHalf.BOTH, m_db ).toString() );
+        m_DeckInfoText[ DeckInfo.INSTANTS.val      ].setText( m_deck.getAmountOfType( WhichType.INSTANTS,      WhichHalf.BOTH, m_db ).toString() );
+        m_DeckInfoText[ DeckInfo.LANDS.val         ].setText( m_deck.getAmountOfType( WhichType.LANDS,         WhichHalf.BOTH, m_db ).toString() );
 
         c_Price price = m_priceDB.getPrice( m_deck, WhichHalf.BOTH );
         m_Price_LowText.setText( price.toString( PriceType.LOW ) );
         m_Price_AverageText.setText( price.toString( PriceType.AVERAGE ) );
         m_Price_HighText.setText( price.toString( PriceType.HIGH ) );
+        price = null;
+
+        if( m_db.getExpansionDB() != null ) {
+            ArrayList<String> blocks = m_db.getExpansionDB().getBlocks();
+            ArrayList<String> legals = new ArrayList<String>();
+            for( String block : blocks ) {
+                if( m_db.isInBlock( m_deck, block ) ) {
+                    legals.add( block + " Block" );
+                }
+            }
+            for( Legals leg : Legals.values() ) {
+                if( m_db.isInLegal( m_deck, leg ) ) {
+                    legals.add( leg.name() + " Legal" );
+                }
+            }
+            m_DeckInfo_LegalList.setListData( legals.toArray() );
+            legals = null;
+            blocks = null;
+        }
 
         CardTable.autoResizeColWidth( m_MainDeck_Table );
         CardTable.autoResizeColWidth( m_Sideboard_Table );
@@ -299,7 +318,7 @@ public class DeckTabPanel extends JPanel implements ActionListener {
     }
 
     public String getFormattedDeckName() {
-        String name = m_DeckInfoText[ DeckInfo.NAME.ordinal() ].getText().trim();
+        String name = m_DeckInfoText[ DeckInfo.NAME.val ].getText().trim();
         if( name.length() > 16 ) {
             name = name.substring( 0, 16 ) + "...";
         }
@@ -307,7 +326,7 @@ public class DeckTabPanel extends JPanel implements ActionListener {
     }
 
     public String getDeckName() {
-        return m_DeckInfoText[ DeckInfo.NAME.ordinal() ].getText().trim();
+        return m_DeckInfoText[ DeckInfo.NAME.val ].getText().trim();
     }
     
     private void keyPressed( boolean fromDeckTable, KeyEvent evt ) {
@@ -337,14 +356,13 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         }
 
         Integer row = table.convertRowIndexToModel( table.getSelectedRow() );
-        Integer mid = dtm.getMID( row ); //.getValueAt( row, DeckTableModel.DeckCols.MID.val );
+        Integer mid = dtm.getMID( row );
         c_Card card = m_db.getCard( mid );
         addCard( card, amount );
 
         table = null;
         dtm = null;
         card = null;
-        //System.gc();
     }
 
     public void addActionListener( ActionListener listener ) {
@@ -358,13 +376,11 @@ public class DeckTabPanel extends JPanel implements ActionListener {
                 ((ActionListener)listeners[i]).actionPerformed( new ActionEvent( this, action, command ) );
 
                 listeners = null;
-                //System.gc();
                 return;
             }
         }
 
         listeners = null;
-        //System.gc();
     }
 
     private void cardSelected( JTable table, c_Deck deck, WhichHalf part ) {
@@ -390,8 +406,9 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         jScrollPane1 = new javax.swing.JScrollPane();
         m_Sideboard_Table = new Deck_Builder.CardTable();
         m_DeckInfo_Panel = new javax.swing.JPanel();
-        m_DeckInfo_ManaCurve = new javax.swing.JPanel();
-        jLabel14 = new javax.swing.JLabel();
+        m_DeckInfo_Legality = new javax.swing.JPanel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        m_DeckInfo_LegalList = new javax.swing.JList();
         m_DeckInfo_Properties = new javax.swing.JPanel();
         m_Properties_DeckNameLabel = new javax.swing.JLabel();
         m_Properties_DeckNameText = new javax.swing.JTextField();
@@ -504,25 +521,22 @@ public class DeckTabPanel extends JPanel implements ActionListener {
 
         m_DeckTabPane.addTab("Sideboard", m_Sideboard_Panel);
 
-        m_DeckInfo_ManaCurve.setBorder(javax.swing.BorderFactory.createTitledBorder("Mana Curve"));
+        m_DeckInfo_Legality.setBorder(javax.swing.BorderFactory.createTitledBorder("Tournament Legality"));
 
-        jLabel14.setText("Coming Soon!");
+        jScrollPane3.setViewportView(m_DeckInfo_LegalList);
 
-        javax.swing.GroupLayout m_DeckInfo_ManaCurveLayout = new javax.swing.GroupLayout(m_DeckInfo_ManaCurve);
-        m_DeckInfo_ManaCurve.setLayout(m_DeckInfo_ManaCurveLayout);
-        m_DeckInfo_ManaCurveLayout.setHorizontalGroup(
-            m_DeckInfo_ManaCurveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(m_DeckInfo_ManaCurveLayout.createSequentialGroup()
+        javax.swing.GroupLayout m_DeckInfo_LegalityLayout = new javax.swing.GroupLayout(m_DeckInfo_Legality);
+        m_DeckInfo_Legality.setLayout(m_DeckInfo_LegalityLayout);
+        m_DeckInfo_LegalityLayout.setHorizontalGroup(
+            m_DeckInfo_LegalityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(m_DeckInfo_LegalityLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel14)
-                .addContainerGap(201, Short.MAX_VALUE))
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 253, Short.MAX_VALUE)
+                .addContainerGap())
         );
-        m_DeckInfo_ManaCurveLayout.setVerticalGroup(
-            m_DeckInfo_ManaCurveLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(m_DeckInfo_ManaCurveLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel14)
-                .addContainerGap(281, Short.MAX_VALUE))
+        m_DeckInfo_LegalityLayout.setVerticalGroup(
+            m_DeckInfo_LegalityLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 306, Short.MAX_VALUE)
         );
 
         m_DeckInfo_Properties.setBorder(javax.swing.BorderFactory.createTitledBorder("Properties"));
@@ -633,48 +647,17 @@ public class DeckTabPanel extends JPanel implements ActionListener {
                 .addContainerGap()
                 .addGroup(m_DeckInfo_PropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
-                        .addComponent(m_Properties_PlaneswalkersLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Properties_PlaneswalkersText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
-                        .addComponent(m_Properties_InstantsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Properties_InstantsText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
-                        .addComponent(m_Properties_LandsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Properties_LandsText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
                         .addComponent(m_Properties_CreationDateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Properties_CreationDateText, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
-                        .addContainerGap())
+                        .addComponent(m_Properties_CreationDateText, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
                         .addComponent(m_Properties_ColorsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Properties_ColorsText, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
-                        .addContainerGap())
+                        .addComponent(m_Properties_ColorsText, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
                         .addComponent(m_Properties_DeckNameLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Properties_DeckNameText, javax.swing.GroupLayout.DEFAULT_SIZE, 151, Short.MAX_VALUE)
-                        .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
-                        .addComponent(m_Properties_CreaturesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Properties_CreaturesText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
-                        .addComponent(m_Properties_ArtifactsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Properties_ArtifactsText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
-                        .addComponent(m_Properties_EnchantmentsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Properties_EnchantmentsText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
-                        .addComponent(m_Properties_SorceriesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(m_Properties_SorceriesText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(m_Properties_DeckNameText, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.LEADING, m_DeckInfo_PropertiesLayout.createSequentialGroup()
                         .addGroup(m_DeckInfo_PropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(m_Properties_SizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -684,11 +667,42 @@ public class DeckTabPanel extends JPanel implements ActionListener {
                             .addComponent(m_Properties_ModificationsText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(m_DeckInfo_PropertiesLayout.createSequentialGroup()
                                 .addComponent(m_Properties_SizeText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                                 .addComponent(m_Properties_SideboardSizeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(m_Properties_SideboardSizeText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())))
+                                .addComponent(m_Properties_SideboardSizeText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addGroup(m_DeckInfo_PropertiesLayout.createSequentialGroup()
+                        .addGroup(m_DeckInfo_PropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(m_DeckInfo_PropertiesLayout.createSequentialGroup()
+                                .addComponent(m_Properties_InstantsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(m_Properties_InstantsText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(m_DeckInfo_PropertiesLayout.createSequentialGroup()
+                                .addComponent(m_Properties_SorceriesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(m_Properties_SorceriesText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(m_DeckInfo_PropertiesLayout.createSequentialGroup()
+                                .addComponent(m_Properties_ArtifactsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(m_Properties_ArtifactsText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(m_DeckInfo_PropertiesLayout.createSequentialGroup()
+                                .addComponent(m_Properties_EnchantmentsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(m_Properties_EnchantmentsText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(m_DeckInfo_PropertiesLayout.createSequentialGroup()
+                                .addComponent(m_Properties_PlaneswalkersLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(m_Properties_PlaneswalkersText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(m_DeckInfo_PropertiesLayout.createSequentialGroup()
+                                .addComponent(m_Properties_CreaturesLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(m_Properties_CreaturesText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(m_DeckInfo_PropertiesLayout.createSequentialGroup()
+                                .addComponent(m_Properties_LandsLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(m_Properties_LandsText, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(130, 130, 130)))
+                .addContainerGap())
         );
         m_DeckInfo_PropertiesLayout.setVerticalGroup(
             m_DeckInfo_PropertiesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -755,7 +769,7 @@ public class DeckTabPanel extends JPanel implements ActionListener {
                 .addContainerGap()
                 .addComponent(m_DeckInfo_Properties, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(m_DeckInfo_ManaCurve, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(m_DeckInfo_Legality, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
         m_DeckInfo_PanelLayout.setVerticalGroup(
@@ -763,8 +777,8 @@ public class DeckTabPanel extends JPanel implements ActionListener {
             .addGroup(m_DeckInfo_PanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(m_DeckInfo_PanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(m_DeckInfo_ManaCurve, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(m_DeckInfo_Properties, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(m_DeckInfo_Properties, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(m_DeckInfo_Legality, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -829,7 +843,7 @@ public class DeckTabPanel extends JPanel implements ActionListener {
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(m_Price_HighText, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+            .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
         );
         m_Misc_PricesLayout.setVerticalGroup(
             m_Misc_PricesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -860,11 +874,11 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         m_Misc_Notes.setLayout(m_Misc_NotesLayout);
         m_Misc_NotesLayout.setHorizontalGroup(
             m_Misc_NotesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 554, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 558, Short.MAX_VALUE)
         );
         m_Misc_NotesLayout.setVerticalGroup(
             m_Misc_NotesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
+            .addComponent(jScrollPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 103, Short.MAX_VALUE)
         );
 
         javax.swing.GroupLayout m_Misc_PanelLayout = new javax.swing.GroupLayout(m_Misc_Panel);
@@ -903,7 +917,7 @@ public class DeckTabPanel extends JPanel implements ActionListener {
     }// </editor-fold>//GEN-END:initComponents
 
     private void m_Properties_DeckNameTextKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_m_Properties_DeckNameTextKeyReleased
-        if( !m_deck.getName().trim().equals( m_DeckInfoText[ DeckInfo.NAME.ordinal() ].getText().trim() ) ) {
+        if( !m_deck.getName().trim().equals( m_DeckInfoText[ DeckInfo.NAME.val ].getText().trim() ) ) {
             m_isSaved = false;
             fireActionEvent( LeftPanel.class, Action.ACTION_DECK_CHANGED, Action.COMMAND_DECK_NAME_CHANGED );
         }
@@ -913,13 +927,13 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         int index = m_DeckTabPane.getSelectedIndex();
         WhichHalf part;
         JTable table;
-        if( index == DeckTab.MAINDECK.ordinal() ) {
+        if( index == DeckTab.MAINDECK.val ) {
             table = this.m_MainDeck_Table;
             part = WhichHalf.DECK;
-        } else if( index == DeckTab.SIDEBOARD.ordinal() ) {
+        } else if( index == DeckTab.SIDEBOARD.val ) {
             table = this.m_Sideboard_Table;
             part = WhichHalf.SB;
-        } else if( index == DeckTab.MISC.ordinal() ) {
+        } else if( index == DeckTab.MISC.val ) {
             table = m_Misc_PricesTable;
 
             if( table.getSelectedRowCount() == 0 ) {
@@ -958,8 +972,6 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         }
 
         int row = m_Misc_PricesTable.getSelectedRow();
-        //String inSB = m_Misc_PricesTable.getValueAt( row, PricesTableModel.PriceCols.SB.val ).toString();
-        //WhichHalf part = ( inSB.equals( "No" ) ? WhichHalf.DECK : WhichHalf.SB );
         Boolean inSB = (Boolean)m_Misc_PricesTable.getValueAt( row, PricesTableModel.PriceCols.SB.val );
         WhichHalf part = ( inSB ? WhichHalf.SB : WhichHalf.DECK );
         cardSelected( m_Misc_PricesTable, m_deck, part );
@@ -1003,14 +1015,15 @@ public class DeckTabPanel extends JPanel implements ActionListener {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
-    private javax.swing.JPanel m_DeckInfo_ManaCurve;
+    private javax.swing.JList m_DeckInfo_LegalList;
+    private javax.swing.JPanel m_DeckInfo_Legality;
     private javax.swing.JPanel m_DeckInfo_Panel;
     private javax.swing.JPanel m_DeckInfo_Properties;
     private javax.swing.JTabbedPane m_DeckTabPane;

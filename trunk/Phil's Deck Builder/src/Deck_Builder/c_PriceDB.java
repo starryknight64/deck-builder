@@ -11,8 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import Deck_Builder.c_Deck.WhichHalf;
 import Deck_Builder.c_Expansion.Acronym;
 import Deck_Builder.c_Price.PriceType;
@@ -23,7 +21,7 @@ import org.apache.commons.io.FileUtils;
  * @author Phillip
  */
 public class c_PriceDB implements ActionListener {
-    //Card|Price|StdDev|Average|High|Low|Change|Raw N
+    /* Card|Price|StdDev|Average|High|Low|Change|Raw N */
     private enum PricesParsing {
         NAME,
         PRICE,
@@ -32,28 +30,26 @@ public class c_PriceDB implements ActionListener {
         HIGH,
         LOW,
         CHANGE,
-        RAW_NUMBER
+        RAW_NUMBER;
+        public int val = this.ordinal();
     }
 
     private static final String PRICES_FILE = "Prices.txt";
     private static final String ACRONYMS_FILE = "/resources/Acronyms.txt";
-                  //Card Name is String
+                 /* Card Name is String */
     private HashMap<String, c_PriceEntry> m_prices = new HashMap<String, c_PriceEntry>();
     private c_ExpansionDB m_expansionDB;
     private boolean parsedFirstLineAcronyms = false;
     private boolean parsedFirstListPrices = false;
 
+    ActionListener m_loadingListener = null;
     private c_CardDB m_db;
 
     public c_PriceDB() {
-        m_db = new c_CardDB();
-        m_expansionDB = new c_ExpansionDB();
     }
-
     public c_PriceDB( c_CardDB db ) {
         m_db = db;
         m_expansionDB = db.getExpansionDB();
-        updatePrices();
     }
 
     public void actionPerformed( ActionEvent e ) {
@@ -61,6 +57,7 @@ public class c_PriceDB implements ActionListener {
         if( e.getID() == Action.ACTION_PRICES_LOAD_LINE ) {
             if( parsedFirstListPrices == false ) {
                 parsedFirstListPrices = true;
+                m_loadingListener.actionPerformed( e );
                 return;
             }
 
@@ -70,10 +67,10 @@ public class c_PriceDB implements ActionListener {
             Double low, avg, high;
             String name, expansion, temp;
 
-            //Card|Price|StdDev|Average|High|Low|Change|Raw N
-            //AEther Figment|0.25|0.00|0.25|0.25|0.25|0.00|4
-            //AEther Flash (6th)|0.36|0.00|0.36|0.36|0.36|0.00|1
-            temp = ary[ PricesParsing.NAME.ordinal() ];
+            /* Card|Price|StdDev|Average|High|Low|Change|Raw N
+               AEther Figment|0.25|0.00|0.25|0.25|0.25|0.00|4
+               AEther Flash (6th)|0.36|0.00|0.36|0.36|0.36|0.00|1 */
+            temp = ary[ PricesParsing.NAME.val ];
             if( temp.endsWith( ")" ) ) {
                 expansion = str.middleOf( "(", temp, ")" );
                 name = str.leftOf( temp, " (" );
@@ -88,9 +85,9 @@ public class c_PriceDB implements ActionListener {
                 name = temp;
             }
 
-            avg = Double.parseDouble( ary[ PricesParsing.AVERAGE.ordinal() ] );
-            high = Double.parseDouble( ary[ PricesParsing.HIGH.ordinal() ] );
-            low = Double.parseDouble( ary[ PricesParsing.LOW.ordinal() ] );
+            avg = Double.parseDouble( ary[ PricesParsing.AVERAGE.val ] );
+            high = Double.parseDouble( ary[ PricesParsing.HIGH.val ] );
+            low = Double.parseDouble( ary[ PricesParsing.LOW.val ] );
             price = new c_Price( low, avg, high, PriceType.AVERAGE );
 
             if( !contains( name ) ) {
@@ -102,34 +99,47 @@ public class c_PriceDB implements ActionListener {
                 entry.addPriceEntry( price, expansion );
             }
 
+            m_loadingListener.actionPerformed( e );
             ary = null;
             entry = null;
             price = null;
             name = null;
             expansion = null;
             temp = null;
+        } else {
+            m_loadingListener.actionPerformed( e );
         }
 
         line = null;
     }
 
-    public void updatePrices() {
+    public boolean loadPricesDB( ActionListener listener ) {
+        boolean success = true;
         try {
             FileUtils.copyURLToFile( new URL( "http://www.magictraders.com/pricelists/current-magic-excel.txt" ), new File( PRICES_FILE ) );
-            updatePrices( PRICES_FILE );
+            listener.actionPerformed( new ActionEvent( this, Action.ACTION_FILE_LOAD_DONE, "" ) );
+            success = updatePrices( listener, PRICES_FILE );
         } catch( Exception ex ) {
-            Logger.getLogger(c_PriceDB.class.getName()).log(Level.SEVERE, "Prices could not be downloaded from magictraders.com!", ex);
+            for( StackTraceElement elem : ex.getStackTrace() ) {
+                System.err.print( elem.toString() + "\n" );
+            }
+            success = false;
         }
+        return success;
     }
     
-    public void updatePrices( String filepath ) {
+    public boolean updatePrices( ActionListener listener, String filepath ) {
+        boolean success = true;
+        m_loadingListener = listener;
         c_File file = new c_File();
         try {
             file.read( this.getClass(), this, Action.ACTION_PRICES_LOAD_LINE, filepath, false );
-        } catch (IOException ex) {
-            Logger.getLogger(c_PriceDB.class.getName()).log(Level.SEVERE, "Prices could not be loaded from disk!", ex);
+        } catch( IOException ex ) {
+            success = false;
         }
         file = null;
+        m_loadingListener = null;
+        return success;
     }
 
     public boolean contains( String cardname ) {

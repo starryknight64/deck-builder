@@ -44,6 +44,7 @@ public class c_Card {
             int i =0;
             return;
         }
+
         Name = dbRow[ DBCol.Name.val ];
         if( Name.contains( "," ) ) {
             Name = Name.substring( 1, Name.length() - 1 );
@@ -63,6 +64,8 @@ public class c_Card {
         String t = dbRow[ DBCol.Toughness.val ];
         if( p.length() > 0 && t.length() > 0 ) {
             PT = p + "/" + t;
+        } else {
+            PT = "";
         }
 
         CastingCost = new c_CastingCost( c_CastingCost.tokenize( dbRow[ DBCol.Cost.val ] ) );
@@ -107,7 +110,7 @@ public class c_Card {
         return toString( 1 );
     }
     public String toString( Integer amount ) {
-        //Card Name	Amt	Card Type	Sub-Type	Cost	P/T	Set	MID
+        /* Card Name	Amt	Card Type	Sub-Type	Cost	P/T	Set	MID */
         return String.format( "%s\t%s\t%s\t%s\t%s\t%s\t%s\t%s",
                               Name,
                               amount.toString(),

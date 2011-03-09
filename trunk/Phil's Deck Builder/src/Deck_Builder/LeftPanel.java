@@ -27,8 +27,9 @@ public class LeftPanel extends JPanel implements ActionListener {
     private RecentlyViewedTableModel m_recentlyViewedCTM = new RecentlyViewedTableModel();
 
     private c_Deck m_recentlyViewedCards = new c_Deck();
-    private c_CardDB m_cardDB = new c_CardDB( "db.txt" );
-    private c_PriceDB m_priceDB = new c_PriceDB( m_cardDB );
+    private c_ExpansionDB m_expansionDB;
+    private c_CardDB m_cardDB;
+    private c_PriceDB m_priceDB;
     private c_Card m_previewCard = new c_Card();
     public static final Integer MAX_DECKS = 6;
     
@@ -38,9 +39,22 @@ public class LeftPanel extends JPanel implements ActionListener {
 
     /** Creates new form LeftPanel */
     public LeftPanel() {
+        super();
         initComponents();
         setAddCardPanelVisibility( false );
-        m_DeckTabs_FirstDeck.addActionListener( this );
+    }
+
+    public boolean loadDBs( ActionListener listener ) {
+        boolean success = true;
+        m_expansionDB = new c_ExpansionDB();
+        success &= m_expansionDB.loadExpansionDB( listener );
+        m_cardDB = new c_CardDB( m_expansionDB );
+        success &= m_cardDB.loadCardDB( listener );
+        m_priceDB = new c_PriceDB( m_cardDB );
+        success &= m_priceDB.loadPricesDB( listener );
+        addDeckTabPanel( new DeckTabPanel( m_cardDB, m_priceDB ) );
+
+        return success;
     }
 
     public c_CardDB getCardDB() {
@@ -57,23 +71,24 @@ public class LeftPanel extends JPanel implements ActionListener {
             if( listeners[i].getClass() == thisClass ) {
                 ((ActionListener)listeners[i]).actionPerformed( new ActionEvent( this, action, command ) );
                 listeners = null;
-                //System.gc();
                 return;
             }
         }
         listeners = null;
-        //System.gc();
     }
 
     public void loadDeck( String filepath ) {
-        isAddingNewDeck = true;
         DeckTabPanel dtp = new DeckTabPanel( filepath, m_cardDB, m_priceDB );
+        addDeckTabPanel( dtp );
+        dtp = null;
+    }
+
+    private void addDeckTabPanel( DeckTabPanel dtp ) {
+        isAddingNewDeck = true;
         dtp.addActionListener( this );
         m_DeckTabs.insertTab( dtp.getDeckName(), null, dtp, null, m_DeckTabs.getTabCount() - 1 );
         m_DeckTabs.setSelectedIndex( m_DeckTabs.getTabCount() - 2 );
         isAddingNewDeck = false;
-
-        dtp = null;
     }
 
     public void saveCurrentDeck( String filepath ) {
@@ -103,7 +118,7 @@ public class LeftPanel extends JPanel implements ActionListener {
     }
 
     public void setPreviewCard( c_Card card ) {
-        Integer row = m_recentlyViewedCTM.getMIDRow( card.MID );//.findValueInColumn( card.MID, RecentlyViewedTableModel.RVCols.MID.val );
+        Integer row = m_recentlyViewedCTM.getMIDRow( card.MID );
 
         if( row < 0 ) {
             m_recentlyViewedCards.addCard( card.MID, 1, true );
@@ -137,7 +152,6 @@ public class LeftPanel extends JPanel implements ActionListener {
         }
 
         command = null;
-        //System.gc();
     }
     
     public void addNewDeck() {
@@ -179,7 +193,6 @@ public class LeftPanel extends JPanel implements ActionListener {
         m_AddCard_Label = new javax.swing.JLabel();
         m_CardPreview_Image = new javax.swing.JLabel();
         m_DeckTabs = new javax.swing.JTabbedPane();
-        m_DeckTabs_FirstDeck =  new DeckTabPanel( m_cardDB, m_priceDB ) ;
         m_DeckTabs_NewDeck = new javax.swing.JPanel();
 
         m_RecentlyViewed_Panel.setBorder(javax.swing.BorderFactory.createTitledBorder("Recently Viewed"));
@@ -275,7 +288,6 @@ public class LeftPanel extends JPanel implements ActionListener {
                 m_DeckTabsStateChanged(evt);
             }
         });
-        m_DeckTabs.addTab("Untitled Deck", m_DeckTabs_FirstDeck);
 
         javax.swing.GroupLayout m_DeckTabs_NewDeckLayout = new javax.swing.GroupLayout(m_DeckTabs_NewDeck);
         m_DeckTabs_NewDeck.setLayout(m_DeckTabs_NewDeckLayout);
@@ -326,7 +338,6 @@ public class LeftPanel extends JPanel implements ActionListener {
     private void m_AddCard_ButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_AddCard_ButtonActionPerformed
         int amount = Integer.parseInt( m_AddCard_Amount.getSelectedItem().toString() );
         addPreviewCardToCurrentDeck( amount );
-        //System.gc();
     }//GEN-LAST:event_m_AddCard_ButtonActionPerformed
 
     private void addPreviewCardToCurrentDeck( int amt ) {                                                 
@@ -404,8 +415,7 @@ public class LeftPanel extends JPanel implements ActionListener {
         }
         
         int row = m_RecentlyViewed_Table.convertRowIndexToModel( m_RecentlyViewed_Table.getSelectedRow() );
-        //Object obj = m_RecentlyViewed_Table.getValueAt( row, RecentlyViewedTableModel.RVCols.MID.val );
-        Integer mid = m_recentlyViewedCTM.getMID( row );//m_recentlyViewedCTM.getValueAt( m_RecentlyViewed_Table.convertRowIndexToModel( row ), RecentlyViewedTableModel.RVCols.MID.val );
+        Integer mid = m_recentlyViewedCTM.getMID( row );
         if( mid != null
          && !mid.toString().equals( "" ) ) {
             c_Card card = m_cardDB.getCard( mid );
@@ -440,7 +450,6 @@ public class LeftPanel extends JPanel implements ActionListener {
     private javax.swing.JLabel m_CardPreview_Image;
     private javax.swing.JPanel m_CardPreview_Panel;
     private javax.swing.JTabbedPane m_DeckTabs;
-    private Deck_Builder.DeckTabPanel m_DeckTabs_FirstDeck;
     private javax.swing.JPanel m_DeckTabs_NewDeck;
     private javax.swing.JPanel m_RecentlyViewed_Panel;
     private Deck_Builder.CardTable m_RecentlyViewed_Table;

@@ -22,7 +22,6 @@ public class c_CastingCost extends c_Colors {
     private final static Integer GLYPH_HEIGHT_IN = GLYPH_WIDTH_IN;
     private final static Integer GLYPH_WIDTH_OUT = 16;
     private final static Integer GLYPH_HEIGHT_OUT = GLYPH_WIDTH_OUT;
-    //private final static String[] GLYPHS = { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "X", "B", "U", "G", "R", "W", ")" };
 
     private ArrayList<String> m_glyphs;
 
@@ -31,7 +30,7 @@ public class c_CastingCost extends c_Colors {
     }
 
     public c_CastingCost( String glyphs ) {
-        // Normalize glyph string
+        /* Normalize glyph string */
         if( glyphs.length() <= 0 ) {
             m_glyphs = new ArrayList<String>();
             return;
@@ -166,9 +165,9 @@ public class c_CastingCost extends c_Colors {
     private int getWidthIn( String glyph ) {
         int width_in = GLYPH_WIDTH_IN;
         if( glyph.equals( "1000000" ) ) {
-            width_in = 61; // Gleemax
+            width_in = 61; /* Gleemax */
         } else if( glyph.equals( "500" ) ) {
-            width_in = 13; // Little Girl
+            width_in = 13; /* Little Girl */
         }
 
         return width_in;
@@ -176,9 +175,9 @@ public class c_CastingCost extends c_Colors {
     private int getWidthOut( String glyph ) {
         int width_out = GLYPH_WIDTH_OUT;
         if( glyph.equals( "1000000" ) ) {
-            width_out = 39; // Gleemax
+            width_out = 39; /* Gleemax */
         } else if( glyph.equals( "500" ) ) {
-            width_out = 8; // Little Girl
+            width_out = 8; /* Little Girl */
         }
 
         return width_out;

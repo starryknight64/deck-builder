@@ -79,6 +79,7 @@ public class c_Deck implements ActionListener {
         PT,
         EXPANSION,
         MID;
+        public int val = this.ordinal();
     }
     
     private HashMap<Integer, Integer> m_cards = new HashMap<Integer, Integer>();
@@ -107,7 +108,6 @@ public class c_Deck implements ActionListener {
         }
         m_isLoadingDeckFile = false;
         file = null;
-        //System.gc();
     }
     
     public boolean saveDeck( String filepath, c_CardDB db ) {
@@ -168,10 +168,10 @@ public class c_Deck implements ActionListener {
                     m_name = str.rightOf( line, DeckLoading.NAME.toString() );
                     m_currentPart = DeckLoading.SIZE;
                 } else if( m_currentPart == DeckLoading.SIZE ) {
-                    // This is calculated, move along
+                    /* This is calculated, move along */
                     m_currentPart = DeckLoading.COLORS;
                 } else if( m_currentPart == DeckLoading.COLORS ) {
-                    // This is also calculated, keep moving
+                    /* This is also calculated, keep moving */
                     m_currentPart = DeckLoading.CREATION_DATE;
                 } else if( m_currentPart == DeckLoading.CREATION_DATE ) {
                     m_creationDate = str.rightOf( line, DeckLoading.CREATION_DATE.toString() );
@@ -320,7 +320,6 @@ public class c_Deck implements ActionListener {
         cards.put( MID, newamount );
 
         cards = null;
-        //System.gc();
     }
 
     public void deleteCard( Integer MID, boolean fromDeck ) {
@@ -331,7 +330,6 @@ public class c_Deck implements ActionListener {
         }
 
         cards = null;
-        //System.gc();
     }
 
     public HashMap<Integer, Integer> getCards() {
@@ -357,12 +355,10 @@ public class c_Deck implements ActionListener {
                 ((ActionListener)listeners[i]).actionPerformed( new ActionEvent( this, action, command ) );
 
                 listeners = null;
-                //System.gc();
                 return;
             }
         }
 
         listeners = null;
-        //System.gc();
     }
 }

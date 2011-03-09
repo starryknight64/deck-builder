@@ -6,7 +6,8 @@
 package Deck_Builder;
 
 import Deck_Builder.c_ExpansionDB.Expansion;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /*
 Usage idea:
@@ -29,7 +30,8 @@ public class c_Expansion {
     private String m_gathererAcronym;
     private String m_expansion;
     private Boolean m_isCore;
-    private String m_date;
+    private String m_block;
+    private Date m_date;
     
     public c_Expansion( String[] expLine ) {
         m_traderAcronym      = expLine[ Acronym.Trader.val ];
@@ -37,19 +39,39 @@ public class c_Expansion {
         m_gathererAcronym    = expLine[ Acronym.Gatherer.val ];
         m_expansion          = expLine[ Expansion.Name.val ];
         m_isCore             = expLine[ Expansion.isCore.val ].equalsIgnoreCase( "Yes" );
-        m_date               = expLine[ Expansion.Date.val ];
+
+        if( !expLine[ Expansion.Date.val ].equals( "?" ) ) {
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat( "MM/dd/yyyy" );
+                m_date = sdf.parse( expLine[ Expansion.Date.val ] );
+                sdf = null;
+            } catch( Exception ex ) {
+                int i=0;
+            }
+        }
+
+        String block = expLine[ Expansion.Block.val ];
+        if( !block.equals( "?" ) ) {
+            m_block = block;
+        } else {
+            m_block = "";
+        }
     }
 
     public String getName() {
         return m_expansion;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return m_date;
     }
 
     public Boolean isCore() {
         return m_isCore;
+    }
+
+    public String getBlock() {
+        return m_block;
     }
     
     public String[] getAllAcronyms() {

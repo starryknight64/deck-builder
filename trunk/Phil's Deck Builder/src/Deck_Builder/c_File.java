@@ -16,8 +16,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintStream;
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.util.regex.Pattern;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -82,7 +82,6 @@ public class c_File {
         if( f.exists() ) {
             ps.print( data );
             ps.close();
-            //fop.flush();
             fop.close();
         }
 
@@ -111,15 +110,17 @@ public class c_File {
             Scanner scanner = null;
             FileReader fr = null;
             fr = new FileReader( filepath );
-            //File file = new File( filepath );
             scanner = new Scanner( fr );
             scanner.useDelimiter( "\r\n" );
-            String line;
+            ArrayList<String> lines = new ArrayList<String>();
 
             while( scanner.hasNext() ) {
-                line = scanner.next();
-                fireActionEvent( _class, action, line );
-                line = null;
+                lines.add( scanner.next() );
+            }
+            fireActionEvent( _class, Action.ACTION_FILE_TOTAL_LINES, Integer.toString( lines.size() ) );
+
+            for( int i=0; i<lines.size(); i++ ) {
+                fireActionEvent( _class, action, lines.get( i ) );
             }
 
             if( scanner != null ) {
@@ -130,6 +131,7 @@ public class c_File {
             }
 
             fireActionEvent( _class, Action.ACTION_FILE_LOAD_DONE, Action.COMMAND_FILE_LOAD_DONE );
+            lines = null;
         }
     }
 
@@ -144,12 +146,10 @@ public class c_File {
                 ((ActionListener)listeners[i]).actionPerformed( new ActionEvent( this, action, command ) );
 
                 listeners = null;
-                ////System.gc();
                 return;
             }
         }
 
         listeners = null;
-        ////System.gc();
     }
 }

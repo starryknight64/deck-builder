@@ -98,12 +98,10 @@ public class ProxyPrinter extends JPanel implements Pageable {
             if( listeners[i].getClass() == thisClass ) {
                 ((ActionListener)listeners[i]).actionPerformed( new ActionEvent( this, action, command ) );
                 listeners = null;
-                //System.gc();
                 return;
             }
         }
         listeners = null;
-        //System.gc();
     }
 
     private void addDeckHalf( HashMap<Integer, Integer> cards, WhichHalf which ) {
@@ -310,15 +308,6 @@ public class ProxyPrinter extends JPanel implements Pageable {
     private void m_printButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_m_printButtonActionPerformed
         PrinterJob pj = PrinterJob.getPrinterJob();
 
-//        int i = 1;
-//        m_cards.put( i++, 4 );
-//        m_cards.put( i++, 4 );
-//        m_cards.put( i++, 4 );
-//        m_cards.put( i++, 9 );
-//        m_cards.put( i++, 20 );
-//        m_cards.put( i++, 1 );
-//        m_cards.put( i++, 1 );
-
         int ind = 0;
         ProxyPage page = new ProxyPage( ind++, m_db );
         HashMap<Integer, Integer> cards = m_deck.getCards();
@@ -472,9 +461,6 @@ public class ProxyPrinter extends JPanel implements Pageable {
                 return NO_SUCH_PAGE;
             }
             try {
-                //Image img = ImageIO.read( new File( "c:\\fdsa.png" ) ); //db.getCard( mid ).getImage();
-                //int height = (int)pf.getImageableHeight();
-                //int width = (int)pf.getImageableWidth();
                 int cnt = 0;
                 for( int i=0; i<CARDS_PER_PAGE_VERT; i++ ) {
                     for( int j=0; j<CARDS_PER_PAGE_HORZ; j++ ) {

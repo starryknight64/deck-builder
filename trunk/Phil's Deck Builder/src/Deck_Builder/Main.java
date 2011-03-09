@@ -5,7 +5,6 @@
 
 package Deck_Builder;
 
-import java.util.Scanner;
 import javax.swing.UIManager;
 
 /**
@@ -17,7 +16,7 @@ public class Main {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
+    public static void main( String[] args ) {
         try {
             String lookAndFeel = UIManager.getSystemLookAndFeelClassName();
             if( lookAndFeel != null ) {
@@ -28,7 +27,6 @@ public class Main {
         }
 
         MainWindow w = new MainWindow();
-        w.setVisible( true );
         w = null;
     }
 

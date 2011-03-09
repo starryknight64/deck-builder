@@ -68,46 +68,49 @@ public class CardTable extends JTable {
 
     public static void autoResizeColWidth( JTable table ) {
         int margin = 5;
+        DefaultTableColumnModel colModel;
+        TableColumn col;
+        TableCellRenderer renderer;
+        Component comp;
 
-        for (int i = 0; i < table.getColumnCount(); i++) {
-            int                     vColIndex = i;
-            DefaultTableColumnModel colModel  = (DefaultTableColumnModel) table.getColumnModel();
-            TableColumn             col       = colModel.getColumn(vColIndex);
-            int                     width     = 0;
+        for( int i=0; i<table.getColumnCount(); i++ ) {
+            int vColIndex = i;
+            colModel = (DefaultTableColumnModel)( table.getColumnModel() );
+            col = colModel.getColumn( vColIndex );
+            int width = 0;
 
-            // Get width of column header
-            TableCellRenderer renderer = col.getHeaderRenderer();
+            /* Get width of column header */
+            renderer = col.getHeaderRenderer();
 
             if (renderer == null) {
                 renderer = table.getTableHeader().getDefaultRenderer();
             }
 
-            Component comp = renderer.getTableCellRendererComponent(table, col.getHeaderValue(), false, false, 0, 0);
+            comp = renderer.getTableCellRendererComponent(table, col.getHeaderValue(), false, false, 0, 0);
 
             width = comp.getPreferredSize().width;
 
-            // Get maximum width of column data
-            for (int r = 0; r < table.getRowCount(); r++) {
-                renderer = table.getCellRenderer(r, vColIndex);
-                comp     = renderer.getTableCellRendererComponent(table, table.getValueAt(r, vColIndex), false, false,
-                        r, vColIndex);
-                width = Math.max(width, comp.getPreferredSize().width);
+            /* Get maximum width of column data */
+            for( int r=0; r<table.getRowCount(); r++ ) {
+                renderer = table.getCellRenderer( r, vColIndex );
+                comp = renderer.getTableCellRendererComponent( table, table.getValueAt(r, vColIndex), false, false, r, vColIndex );
+                width = Math.max( width, comp.getPreferredSize().width );
             }
 
-            // Add margin
+            /* Add margin */
             width += 2 * margin;
 
-            // Set the width
+            /* Set the width */
             col.setPreferredWidth(width);
         }
 
-        ((DefaultTableCellRenderer) table.getTableHeader().getDefaultRenderer()).setHorizontalAlignment(
-            SwingConstants.LEFT);
+        ((DefaultTableCellRenderer)table.getTableHeader().getDefaultRenderer()).setHorizontalAlignment( SwingConstants.LEFT );
+        table.getTableHeader().setReorderingAllowed( false );
 
-        // table.setAutoCreateRowSorter(true);
-        table.getTableHeader().setReorderingAllowed(false);
-
-        //return table;
+        colModel = null;
+        col = null;
+        renderer = null;
+        comp = null;
     }
 
     private void init( TableModel model ) {
@@ -116,11 +119,6 @@ public class CardTable extends JTable {
                 return o1.compareTo( o2 );
             }
         };
-//        Comparator<ImageIcon> img_comparator = new Comparator<ImageIcon>() {
-//            public int compare( ImageIcon o1, ImageIcon o2 ) {
-//                return o1.getDescription().compareTo( o2.getDescription() );
-//            }
-//        };
         Comparator<String> pt_comparator = new Comparator<String>() {
             public int compare( String o1, String o2 ) {
                 if( o1.length() <= 2 || o2.length() <= 2 ) {
@@ -171,9 +169,9 @@ public class CardTable extends JTable {
                     return cmp;
                 }
 
-                // At this point we know that both images have the same number of glyphs
-                // And we know that the CMC of both images are equal
-                // So a String comparison of the two Mana Costs should be sufficient
+                /* At this point we know that both images have the same number of glyphs
+                   And we know that the CMC of both images are equal
+                   So a String comparison of the two Mana Costs should be sufficient */
                 return desc1.compareTo( desc2 );
             }
         };
@@ -194,39 +192,39 @@ public class CardTable extends JTable {
         sorter.setSortsOnUpdates( true );
 
         if( model instanceof DeckTableModel ) {
-            // Set Cell Renderer for Amount and P/T Columns
+            /* Set Cell Renderer for Amount and P/T Columns */
             cm.getColumn( DeckTableModel.DeckCols.Amount.val ).setCellRenderer( ccr_text );
             cm.getColumn( DeckTableModel.DeckCols.PT.val ).setCellRenderer( ccr_text );
             
-            // Set Comparators for Mana Cost and Amount Columns
+            /* Set Comparators for Mana Cost and Amount Columns */
             sorter.setComparator( DeckTableModel.DeckCols.ManaCost.val, cmc_comparator );
             sorter.setComparator( DeckTableModel.DeckCols.Amount.val, int_comparator );
             sorter.setComparator( DeckTableModel.DeckCols.PT.val, pt_comparator );
             setRowSorter( sorter );
 
         } else if( model instanceof PricesTableModel ) {
-            // Set Cell Renderer for Low, Average, and High Prices Columns
+            /* Set Cell Renderer for Low, Average, and High Prices Columns */
             cm.getColumn( PricesTableModel.PriceCols.Amount.val ).setCellRenderer( ccr_text );
             cm.getColumn( PricesTableModel.PriceCols.Low.val ).setCellRenderer( ccr_prices );
             cm.getColumn( PricesTableModel.PriceCols.Average.val ).setCellRenderer( ccr_prices );
             cm.getColumn( PricesTableModel.PriceCols.High.val ).setCellRenderer( ccr_prices );
 
-            // Set Comparators for Low, Average, and High Prices Columns
+            /* Set Comparators for Low, Average, and High Prices Columns */
             sorter.setComparator( PricesTableModel.PriceCols.Amount.val, int_comparator );
             setRowSorter( sorter );
 
         } else if( model instanceof ProxiesTableModel ) {
-            // Set Cell Renderer for Deck Amount and Print Amount Columns
+            /* Set Cell Renderer for Deck Amount and Print Amount Columns */
             cm.getColumn( ProxiesTableModel.ProxyCols.Deck_Amount.val ).setCellRenderer( ccr_text );
             cm.getColumn( ProxiesTableModel.ProxyCols.Print_Amount.val ).setCellRenderer( ccr_text );
 
-            // Set Comparators for Deck Amount and Print Amount Columns
+            /* Set Comparators for Deck Amount and Print Amount Columns */
             sorter.setComparator( ProxiesTableModel.ProxyCols.Deck_Amount.val, int_comparator );
             sorter.setComparator( ProxiesTableModel.ProxyCols.Print_Amount.val, int_comparator );
             setRowSorter( sorter );
 
         } else if( model instanceof RecentlyViewedTableModel ) {
-            // Set Comparator for Mana Cost Column
+            /* Set Comparator for Mana Cost Column */
             sorter.setComparator( RecentlyViewedTableModel.RVCols.ManaCost.val, cmc_comparator );
             setRowSorter( sorter );
 
@@ -322,18 +320,6 @@ public class CardTable extends JTable {
         public void delMID( int row ) {
             m_MIDs.remove( row );
         }
-
-//        @Override
-//        public Object getValueAt( int row, int column ) {
-//            Vector rowVector = (Vector)dataVector.elementAt(row);
-//            return rowVector.elementAt(column);
-//
-//        }
-//
-//        public Object getValueAt( int row, int column, boolean b ) {
-//            Vector rowVector = (Vector)dataVector.elementAt(row);
-//            return rowVector.elementAt(column);
-//        }
     }
     
     public static class DeckTableModel extends CardTableModel {
@@ -349,7 +335,7 @@ public class CardTable extends JTable {
             MID      ( "MID",       Integer.class,   false );
 
             public Boolean isVisible;
-            public Integer val;
+            public Integer val = this.ordinal();
             public String name;
             private Class m_class;
 
@@ -366,7 +352,6 @@ public class CardTable extends JTable {
 
             private DeckCols( String nm, Class cls, boolean vis ) {
                 isVisible = vis;
-                val = this.ordinal();
                 m_class = cls;
                 name = nm;
             }
@@ -398,7 +383,7 @@ public class CardTable extends JTable {
         }
 
         public void updateCardAmount( c_Card card, int amt ) {
-            int row = getMIDRow( card.MID );//findValueInColumn( card.MID, DeckCols.MID.val );
+            int row = getMIDRow( card.MID );
             if( row >= 0 ) {
                 setValueAt( amt, row, DeckCols.Amount.val );
             }
@@ -438,7 +423,7 @@ public class CardTable extends JTable {
             MID      ( "MID",       Integer.class, false );
 
             public Boolean isVisible;
-            public Integer val;
+            public Integer val = this.ordinal();;
             public String name;
             private Class m_class;
 
@@ -455,7 +440,6 @@ public class CardTable extends JTable {
 
             private PriceCols( String nm, Class cls, boolean vis ) {
                 isVisible = vis;
-                val = this.ordinal();
                 m_class = cls;
                 name = nm;
             }
@@ -487,14 +471,14 @@ public class CardTable extends JTable {
         }
 
         public void updateCardAmount( c_Card card, int amt, boolean toDeck ) {
-            int row = getMIDRow( (toDeck ? 1 : -1) * card.MID );//findValueInColumn( card.MID, PriceCols.MID.val );
+            int row = getMIDRow( (toDeck ? 1 : -1) * card.MID );
             if( row >= 0 ) {
                 setValueAt( amt, row, PriceCols.Amount.val );
             }
         }
 
         public void deleteCard( c_Card card ) {
-            int row = getMIDRow( card.MID );//findValueInColumn( card.MID, PriceCols.MID.val );
+            int row = getMIDRow( card.MID );
             if( row >= 0 ) {
                 removeRow( row );
                 delMID( row );
@@ -529,7 +513,7 @@ public class CardTable extends JTable {
             MID          ( "MID",       Integer.class, false );
 
             public Boolean isVisible;
-            public Integer val;
+            public Integer val = this.ordinal();
             public String name;
             private Class m_class;
 
@@ -546,7 +530,6 @@ public class CardTable extends JTable {
 
             private ProxyCols( String nm, Class cls, boolean vis ) {
                 isVisible = vis;
-                val = this.ordinal();
                 m_class = cls;
                 name = nm;
             }
@@ -598,7 +581,7 @@ public class CardTable extends JTable {
             MID     ( "MID",       Integer.class,   false );
 
             public Boolean isVisible;
-            public Integer val;
+            public Integer val = this.ordinal();
             public String name;
             private Class m_class;
 
@@ -615,7 +598,6 @@ public class CardTable extends JTable {
 
             private RVCols( String nm, Class cls, boolean vis ) {
                 isVisible = vis;
-                val = this.ordinal();
                 m_class = cls;
                 name = nm;
             }
@@ -643,7 +625,7 @@ public class CardTable extends JTable {
 
         public void addCard( c_Card card ) {
             addMID( card.MID );
-            insertRow( getRowCount(), new Object[] { card.CastingCost.getImage(), card.Name, card.Type } );//, card.MID } );
+            insertRow( getRowCount(), new Object[] { card.CastingCost.getImage(), card.Name, card.Type } );
         }
 
         @Override
