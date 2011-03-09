@@ -188,7 +188,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="Deck_Builder.WebBrowserPanel" name="m_webBrowserPanel">
+            <Component class="GUI.WebBrowserPanel" name="m_webBrowserPanel">
             </Component>
           </SubComponents>
         </Container>
@@ -201,7 +201,7 @@
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
           <SubComponents>
-            <Component class="Deck_Builder.LeftPanel" name="m_leftPanel">
+            <Component class="GUI.LeftPanel" name="m_leftPanel">
             </Component>
           </SubComponents>
         </Container>

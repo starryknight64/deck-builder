@@ -3,9 +3,9 @@
  * and open the template in the editor.
  */
 
-package Deck_Builder;
+package Data;
 
-import Deck_Builder.c_ExpansionDB.Expansion;
+import Data.c_ExpansionDB.Expansion;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 

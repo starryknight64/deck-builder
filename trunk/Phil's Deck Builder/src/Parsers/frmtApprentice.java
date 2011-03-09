@@ -5,10 +5,10 @@
 
 package Parsers;
 
-import Deck_Builder.c_Card;
-import Deck_Builder.c_CardDB;
-import Deck_Builder.c_Deck;
-import Deck_Builder.c_Deck.WhichHalf;
+import Data.c_Card;
+import Data.c_CardDB;
+import Data.c_Deck;
+import Data.c_Deck.WhichHalf;
 
 /**
  *

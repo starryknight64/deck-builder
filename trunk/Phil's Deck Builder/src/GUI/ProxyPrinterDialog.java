@@ -3,8 +3,10 @@
  * and open the template in the editor.
  */
 
-package Deck_Builder;
+package GUI;
 
+import Data.c_CardDB;
+import Data.c_Deck;
 import java.awt.Dimension;
 import java.awt.Frame;
 import java.awt.event.ActionListener;

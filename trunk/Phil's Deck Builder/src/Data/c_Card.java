@@ -3,9 +3,10 @@
  * and open the template in the editor.
  */
 
-package Deck_Builder;
+package Data;
 
-import Deck_Builder.c_CardDB.DBCol;
+import GUI.WebBrowserPanel;
+import Data.c_CardDB.DBCol;
 import java.awt.Image;
 import java.io.File;
 import java.net.URL;

@@ -9,8 +9,13 @@
  * Created on Nov 2, 2010, 3:58:04 PM
  */
 
-package Deck_Builder;
+package GUI;
 
+import Deck_Builder.Dialog;
+import Deck_Builder.Action;
+import Data.c_CardDB;
+import Data.c_File;
+import Data.c_Card;
 import Parsers.DeckFormat;
 import Parsers.DeckFormats;
 import java.awt.Dimension;
@@ -134,9 +139,9 @@ public class MainWindow extends JFrame implements ActionListener {
 
         jSplitPane1 = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        m_webBrowserPanel = new Deck_Builder.WebBrowserPanel();
+        m_webBrowserPanel = new GUI.WebBrowserPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        m_leftPanel = new Deck_Builder.LeftPanel();
+        m_leftPanel = new GUI.LeftPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu3 = new javax.swing.JMenu();
         m_File_NewDeck = new javax.swing.JMenuItem();
@@ -448,7 +453,7 @@ public class MainWindow extends JFrame implements ActionListener {
     private javax.swing.JMenuItem m_File_PrintProxies;
     private javax.swing.JMenuItem m_File_SaveDeck;
     private javax.swing.JMenuItem m_File_SaveDeckAs;
-    private Deck_Builder.LeftPanel m_leftPanel;
-    private Deck_Builder.WebBrowserPanel m_webBrowserPanel;
+    private GUI.LeftPanel m_leftPanel;
+    private GUI.WebBrowserPanel m_webBrowserPanel;
     // End of variables declaration//GEN-END:variables
 }

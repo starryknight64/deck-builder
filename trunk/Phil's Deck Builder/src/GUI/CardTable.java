@@ -3,8 +3,11 @@
  * and open the template in the editor.
  */
 
-package Deck_Builder;
+package GUI;
 
+import Data.c_CastingCost;
+import Data.c_Price;
+import Data.c_Card;
 import java.awt.Component;
 import java.awt.Font;
 import java.util.ArrayList;

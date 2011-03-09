@@ -9,20 +9,27 @@
  * Created on Nov 2, 2010, 8:35:05 PM
  */
 
-package Deck_Builder;
+package GUI;
 
+import Deck_Builder.Action;
+import Data.c_PriceDB;
+import Data.c_CastingCost;
+import Data.c_CardDB;
+import Data.c_Card;
+import Data.c_Deck;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import Deck_Builder.CardTable.DeckTableModel;
-import Deck_Builder.CardTable.PricesTableModel;
-import Deck_Builder.c_Deck.CardLoading;
-import Deck_Builder.c_Deck.WhichHalf;
-import Deck_Builder.c_Deck.WhichType;
-import Deck_Builder.c_ExpansionDB.Legals;
-import Deck_Builder.c_Price.PriceType;
+import GUI.CardTable.DeckTableModel;
+import GUI.CardTable.PricesTableModel;
+import Data.c_Deck.CardLoading;
+import Data.c_Deck.WhichHalf;
+import Data.c_Deck.WhichType;
+import Data.c_ExpansionDB.Legals;
+import Data.c_Price;
+import Data.c_Price.PriceType;
 import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.JTable;
@@ -401,10 +408,10 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         m_DeckTabPane = new javax.swing.JTabbedPane();
         m_MainDeck_Panel = new javax.swing.JPanel();
         jScrollPane5 = new javax.swing.JScrollPane();
-        m_MainDeck_Table = new Deck_Builder.CardTable();
+        m_MainDeck_Table = new GUI.CardTable();
         m_Sideboard_Panel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        m_Sideboard_Table = new Deck_Builder.CardTable();
+        m_Sideboard_Table = new GUI.CardTable();
         m_DeckInfo_Panel = new javax.swing.JPanel();
         m_DeckInfo_Legality = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
@@ -445,7 +452,7 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        m_Misc_PricesTable = new Deck_Builder.CardTable();
+        m_Misc_PricesTable = new GUI.CardTable();
         m_Misc_Notes = new javax.swing.JPanel();
         jScrollPane4 = new javax.swing.JScrollPane();
         m_Misc_NotesText = new javax.swing.JTextArea();
@@ -1028,12 +1035,12 @@ public class DeckTabPanel extends JPanel implements ActionListener {
     private javax.swing.JPanel m_DeckInfo_Properties;
     private javax.swing.JTabbedPane m_DeckTabPane;
     private javax.swing.JPanel m_MainDeck_Panel;
-    private Deck_Builder.CardTable m_MainDeck_Table;
+    private GUI.CardTable m_MainDeck_Table;
     private javax.swing.JPanel m_Misc_Notes;
     private javax.swing.JTextArea m_Misc_NotesText;
     private javax.swing.JPanel m_Misc_Panel;
     private javax.swing.JPanel m_Misc_Prices;
-    private Deck_Builder.CardTable m_Misc_PricesTable;
+    private GUI.CardTable m_Misc_PricesTable;
     private javax.swing.JTextField m_Price_AverageText;
     private javax.swing.JTextField m_Price_HighText;
     private javax.swing.JTextField m_Price_LowText;
@@ -1064,7 +1071,7 @@ public class DeckTabPanel extends JPanel implements ActionListener {
     private javax.swing.JLabel m_Properties_SorceriesLabel;
     private javax.swing.JTextField m_Properties_SorceriesText;
     private javax.swing.JPanel m_Sideboard_Panel;
-    private Deck_Builder.CardTable m_Sideboard_Table;
+    private GUI.CardTable m_Sideboard_Table;
     // End of variables declaration//GEN-END:variables
 
 }
