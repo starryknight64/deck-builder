@@ -77,7 +77,7 @@ public class MainWindow extends JFrame implements ActionListener {
         m_curCard = new c_Card();
         m_leftPanel.addActionListener( this );
 
-        screen = new CustomSplashScreen( new ImageIcon( "logo.png" ) );
+        screen = new CustomSplashScreen( new ImageIcon( getClass().getResource( "/resources/Images/logo.png" ) ) );
         screen.setLocationRelativeTo( null );
         screen.setScreenVisible( true );
         boolean success = m_leftPanel.loadDBs( this );
