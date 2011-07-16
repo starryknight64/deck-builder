@@ -30,6 +30,7 @@ public class Action {
     public static final Integer ACTION_STANDARD_LEGAL_LOAD_LINE = ActionEvent.ACTION_FIRST + 16;
     public static final Integer ACTION_VINTAGE_LEGAL_LOAD_LINE  = ActionEvent.ACTION_FIRST + 17;
     public static final Integer ACTION_FILE_TOTAL_LINES         = ActionEvent.ACTION_FIRST + 18;
+    public static final Integer ACTION_DECK_SAVED               = ActionEvent.ACTION_FIRST + 19;
 
     public static final String COMMAND_DECK_NAME_CHANGED    = "DeckNameChanged";
     public static final String COMMAND_CURRENT_DECK_CHANGED = "CurrentDeckChanged";

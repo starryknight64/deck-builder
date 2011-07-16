@@ -150,6 +150,10 @@ public class c_Deck implements ActionListener {
             Logger.getLogger(c_Deck.class.getName()).log(Level.SEVERE, String.format( "Error writing to '%s'", filepath ), ex);
         }
 
+        if( saveSuccess ) {
+            fireActionEvent( DeckTabPanel.class, Action.ACTION_DECK_SAVED, null );
+        }
+
         file = null;
         card = null;
         lines = null;

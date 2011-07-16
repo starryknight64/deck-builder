@@ -239,6 +239,9 @@ public class DeckTabPanel extends JPanel implements ActionListener {
             ary = null;
             card = null;
             amount = null;
+        } else if( e.getID() == Action.ACTION_DECK_SAVED ) {
+            m_isSaved = true;
+            updateDeckInfo();
         }
     }
 
@@ -264,7 +267,8 @@ public class DeckTabPanel extends JPanel implements ActionListener {
     public void updateDeckInfo() {
         m_DeckInfoText[ DeckInfo.NAME.val          ].setText( m_deck.getName() );
 
-        if( m_DeckInfoText[ DeckInfo.NAME.val ].getText().charAt( 0 ) != this.getFormattedDeckName().charAt( 0 ) ) {
+        if( m_DeckInfoText[ DeckInfo.NAME.val ].getText().charAt( 0 ) != this.getFormattedDeckName().charAt( 0 )
+         || m_isSaved ) {
             fireActionEvent( LeftPanel.class, Action.ACTION_DECK_CHANGED, Action.COMMAND_DECK_NAME_CHANGED );
         }
 
