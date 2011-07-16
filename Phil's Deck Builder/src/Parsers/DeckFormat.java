@@ -239,4 +239,5 @@ public abstract class DeckFormat extends FileFilter {
     }
 
     public abstract boolean saveDeck( String filename, c_Deck deck, c_CardDB db );
+    public abstract boolean loadDeck( String filename, c_Deck deck, c_CardDB db );
 }

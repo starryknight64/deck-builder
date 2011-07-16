@@ -23,7 +23,10 @@ public class frmtPhilsDeckBuilder extends DeckFormat {
         super( "Phil's Deck Files", Extension );
     }
 
-    @Override
+    public boolean loadDeck( String filename, c_Deck deck, c_CardDB db ) {
+        return true;
+    }
+
     public boolean saveDeck( String filename, c_Deck deck, c_CardDB db ) {
         String ext = c_File.getExtension( filename.toLowerCase() );
         String filepath = filename;
