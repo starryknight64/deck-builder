@@ -352,11 +352,13 @@ public class MainWindow extends JFrame implements ActionListener {
         }
 
         if( cmd == JFileChooser.APPROVE_OPTION || !isSaveAs ) {
+            deck.getDeck().setName( deck.getDeckName() );
             saveSuccess = ((DeckFormat)filter).saveDeck( filepath, m_leftPanel.getCurrentDeckTab().getDeck(), m_db );
         }
 
         if( saveSuccess ) {
             m_File_SaveDeck.setEnabled( false );
+            deck.updateDeckInfo();
         }
         
         return saveSuccess;
