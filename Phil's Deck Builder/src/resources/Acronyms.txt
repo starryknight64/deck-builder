@@ -64,6 +64,7 @@ MM	Mercadian Masques
 MOR	Morningtide
 MRD	Mirrodin
 NE	Nemesis
+NPH	New Phyrexia
 OD	Odyssey
 ONS	Onslaught
 P2	Portal Second Age
