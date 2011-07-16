@@ -31,20 +31,26 @@ public class frmtApprentice extends DeckFormat {
         super( "Magic Apprentice Deck Files", Extension );
     }
 
+    public boolean loadDeck( String filename, c_Deck deck, c_CardDB db ) {
+        return true;
+    }
+
     public boolean saveDeck( String filename, c_Deck deck, c_CardDB db ) {
         boolean success = true;
+        c_Card card;
+        
         try {
             String lines = "";
             lines += addLine( new Keyword[]{ Keyword.NAME }, new String[]{ deck.getName() } );
 
             for( int mid : deck.getCards().keySet() ) {
-                c_Card card = db.getCard( mid );
+                card = db.getCard( mid );
                 Integer amt = deck.getAmountOfCard( mid, WhichHalf.DECK );
                 lines += addLine( new Keyword[]{ Keyword.CARD_AMT, Keyword.CARD_NAME }, new String[]{ amt.toString(), card.Name } );
             }
 
             for( int mid : deck.getSBCards().keySet() ) {
-                c_Card card = db.getCard( mid );
+                card = db.getCard( mid );
                 Integer amt = deck.getAmountOfCard( mid, WhichHalf.SB );
                 lines += addLine( Keyword.SB_PREFIX );
                 lines += addLine( new Keyword[]{ Keyword.CARD_AMT, Keyword.CARD_NAME }, new String[]{ amt.toString(), card.Name } );
@@ -54,6 +60,8 @@ public class frmtApprentice extends DeckFormat {
         } catch( Exception ex ) {
             success = false;
         }
+        
+        card = null;
         return success;
     }
 }
