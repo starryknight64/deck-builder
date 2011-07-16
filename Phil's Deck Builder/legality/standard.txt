@@ -1,1 +1,4 @@
+--banned
+Jace, the Mind Sculptor
+Stoneforge Mystic
 --http://www.wizards.com/Magic/TCG/Resources.aspx?x=judge/resources/sfrstandard
