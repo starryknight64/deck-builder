@@ -39,6 +39,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import GUI.CardTable.RecentlyViewedTableModel;
+import Parsers.DeckFormat;
 import javax.swing.JPanel;
 import javax.swing.event.EventListenerList;
 
@@ -100,8 +101,8 @@ public class LeftPanel extends JPanel implements ActionListener {
         listeners = null;
     }
 
-    public void loadDeck( String filepath ) {
-        DeckTabPanel dtp = new DeckTabPanel( filepath, m_cardDB, m_priceDB );
+    public void loadDeck( DeckFormat format, String filepath ) {
+        DeckTabPanel dtp = new DeckTabPanel( format, filepath, m_cardDB, m_priceDB );
         addDeckTabPanel( dtp );
         dtp = null;
     }
@@ -114,10 +115,11 @@ public class LeftPanel extends JPanel implements ActionListener {
         isAddingNewDeck = false;
     }
 
-    public void saveCurrentDeck( String filepath ) {
+    public boolean saveCurrentDeck( DeckFormat format, String filepath ) {
         DeckTabPanel curDeckTab = (DeckTabPanel)m_DeckTabs.getSelectedComponent();
-        curDeckTab.saveDeck( filepath );
+        boolean success = curDeckTab.saveDeck( format, filepath );
         curDeckTab = null;
+        return success;
     }
 
     public DeckTabPanel getCurrentDeckTab() {

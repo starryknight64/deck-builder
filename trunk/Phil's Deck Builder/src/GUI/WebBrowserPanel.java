@@ -89,9 +89,6 @@ public class WebBrowserPanel extends MozillaPanel {
     public c_Card getCard() {
         return m_card;
     }
-    public void loadCard( Integer mid ) {
-        loadHTML( String.format( "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=%s", mid ) );
-    }
 
     public ArrayList<String> getContent() {
         return (ArrayList<String>)m_content.clone();
@@ -155,57 +152,7 @@ public class WebBrowserPanel extends MozillaPanel {
 
         if( this.getDocument().getDocumentURI().startsWith( "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=" ) ) {
             m_card = new c_Card();
-            String line;
-
-            for( int i=0; i<m_content.size(); i++ ) {
-                line = m_content.get( i );
-
-                if( line.contains( "multiverseid=" ) && m_card.MID == 0 ) {
-                    foundCard = true;
-                    m_card.MID = Integer.parseInt( str.middleOf( "multiverseid=", line, "\" id=" ) );
-                    i += 300; /* help out the parser a little */
-                } else if( line.contains( "Card Name:" ) ) {
-                    i += 2;
-                    m_card.Name = str.leftOf( m_content.get( i ), "</div>" ).trim();
-                } else if( line.contains( "Mana Cost:" ) ) {
-                    i += 2;
-                    line = m_content.get( i );
-                    String glyphs = "";
-
-                    do {
-                        line = str.rightOf( line, "/Handlers/Image.ashx?size=medium&amp;name=" );
-                        glyphs += str.leftOf( line, "&amp;type=symbol" ) + ",";
-                    } while( line.contains( "/Handlers/Image.ashx?size=medium&amp;name=" ) );
-
-                    m_card.CastingCost = new c_CastingCost( glyphs.substring( 0, glyphs.length() - 1 ) );
-                    
-                    i += 5; /* skip over converted mana cost */
-                    
-                    glyphs = null;
-                } else if( line.contains( "Types:" ) ) {
-                    i += 2;
-                    line = m_content.get( i );
-
-                    if( line.contains( "—" ) ) {
-                        m_card.Type = str.leftOf( line, "—" ).trim();
-                        m_card.SubType = str.middleOf( "— ", line, "</div>" );
-                    } else {
-                        m_card.Type = str.leftOf( line, "</div>" ).trim();
-                        m_card.SubType = "";
-                    }
-                } else if( line.contains( "P/T:" ) ) {
-                    i += 2;
-                    line = m_content.get( i );
-                    m_card.PT = str.leftOf( line, "</div>" ).replaceAll( " ", "" );
-                } else if( line.contains( "Expansion:" ) ) {
-                    i += 4;
-                    line = m_content.get( i );
-                    m_card.Expansion = str.middleOf( ">", line, "</a>" );
-                    break; /* nothing left of interest */
-                }
-            }
-            
-            line = null;
+            foundCard = parseContent( m_content, m_card );
         }
 
         if( foundCard ) {
@@ -213,6 +160,62 @@ public class WebBrowserPanel extends MozillaPanel {
         }
 
         return action;
+    }
+
+    public static boolean parseContent( ArrayList<String> content, c_Card card ) {
+        boolean foundCard = false;
+        String line;
+
+        for( int i=0; i<content.size(); i++ ) {
+            line = content.get( i );
+
+            if( line.contains( "multiverseid=" ) && card.MID == 0 ) {
+                foundCard = true;
+                card.MID = Integer.parseInt( str.middleOf( "multiverseid=", line, "\" id=" ) );
+                i += 300; /* help out the parser a little */
+            } else if( line.contains( "Card Name:" ) ) {
+                i += 2;
+                card.Name = str.leftOf( content.get( i ), "</div>" ).trim();
+            } else if( line.contains( "Mana Cost:" ) ) {
+                i += 2;
+                line = content.get( i );
+                String glyphs = "";
+
+                do {
+                    line = str.rightOf( line, "/Handlers/Image.ashx?size=medium&amp;name=" );
+                    glyphs += str.leftOf( line, "&amp;type=symbol" ) + ",";
+                } while( line.contains( "/Handlers/Image.ashx?size=medium&amp;name=" ) );
+
+                card.CastingCost = new c_CastingCost( glyphs.substring( 0, glyphs.length() - 1 ) );
+
+                i += 5; /* skip over converted mana cost */
+
+                glyphs = null;
+            } else if( line.contains( "Types:" ) ) {
+                i += 2;
+                line = content.get( i );
+
+                if( line.contains( "—" ) ) {
+                    card.Type = str.leftOf( line, "—" ).trim();
+                    card.SubType = str.middleOf( "— ", line, "</div>" );
+                } else {
+                    card.Type = str.leftOf( line, "</div>" ).trim();
+                    card.SubType = "";
+                }
+            } else if( line.contains( "P/T:" ) ) {
+                i += 2;
+                line = content.get( i );
+                card.PT = str.leftOf( line, "</div>" ).replaceAll( " ", "" );
+            } else if( line.contains( "Expansion:" ) ) {
+                i += 4;
+                line = content.get( i );
+                card.Expansion = str.middleOf( ">", line, "</a>" );
+                break; /* nothing left of interest */
+            }
+        }
+
+        line = null;
+        return foundCard;
     }
 
     private void fireActionEvent( Class thisClass, Integer action, String command ) {

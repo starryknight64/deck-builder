@@ -22,13 +22,16 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 package Data;
 
 import Deck_Builder.Action;
-import GUI.WebBrowserPanel;
 import Data.c_ExpansionDB.Keyword;
 import Data.c_ExpansionDB.Legals;
+import GUI.WebBrowserPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.apache.commons.io.FileUtils;
 
 /**
  *
@@ -218,17 +221,25 @@ public class c_CardDB implements ActionListener {
         if( contains( mid ) ) {
             return m_cards.get( mid );
         } else {
-            final WebBrowserPanel webBrowser = new WebBrowserPanel();
-            final c_Card card = new c_Card();
+            c_Card card = new c_Card();
 
-            webBrowser.addActionListener( new ActionListener() {
-                public void actionPerformed( ActionEvent e ) {
-                    card.setCard( webBrowser.getCard() );
-                }
-            } );
+            try {
+                File tempFile = File.createTempFile( "phils_deck_builder", null );
+                c_File file = new c_File();
+                ArrayList<String> content;
 
-            webBrowser.loadCard( mid );
-            while( webBrowser.isLoading() ) {}
+                FileUtils.copyURLToFile( new URL( String.format( "http://gatherer.wizards.com/Pages/Card/Details.aspx?multiverseid=%s", mid ) ), tempFile );
+                content = file.read( tempFile.getCanonicalPath(), false );
+                WebBrowserPanel.parseContent( content, card );
+                tempFile.deleteOnExit();
+
+                tempFile = null;
+                file = null;
+                content = null;
+            } catch( Exception ex2 ) {
+                int i =0;
+            }
+
             return card;
         }
     }
