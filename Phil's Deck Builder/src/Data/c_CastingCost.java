@@ -87,7 +87,7 @@ public class c_CastingCost extends c_Colors {
                 if( isDigit ) {
                     isDigit = false;
                     temp += ",";
-                } else if( ch == 'P' ) { // Handles Phyrexian symbols
+                } else if( ch == 'P' ) { /* Handles Phyrexian symbols */
                     temp += ch;
                     ch = glyphs.charAt( i + 1 );
                 }

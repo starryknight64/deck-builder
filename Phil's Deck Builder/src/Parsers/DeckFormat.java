@@ -24,8 +24,11 @@ package Parsers;
 import Data.c_CardDB;
 import Data.c_Deck;
 import Data.c_File;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.EnumMap;
+import javax.swing.event.EventListenerList;
 import javax.swing.filechooser.FileFilter;
 
 /**
@@ -57,6 +60,7 @@ public abstract class DeckFormat extends FileFilter {
     }
     
     protected c_File m_file = new c_File();
+    private EventListenerList m_listeners = new EventListenerList();
     
     public static final String[][] Arcane = {
         { Keyword.CARD_AMT.toString(),  "%s,"      },
@@ -252,6 +256,24 @@ public abstract class DeckFormat extends FileFilter {
 
     protected String addLine( Keyword word ) {
         return Format.get( word );
+    }
+
+    public void addActionListener( ActionListener listener ) {
+        m_listeners.add( ActionListener.class, listener );
+    }
+
+    public void fireActionEvent( Class thisClass, Integer action, String command ) {
+        Object listeners[] = m_listeners.getListenerList();
+        for( int i=listeners.length-1; i>=0; i-- ) {
+            if( listeners[i].getClass() == thisClass ) {
+                ((ActionListener)listeners[i]).actionPerformed( new ActionEvent( this, action, command ) );
+
+                listeners = null;
+                return;
+            }
+        }
+
+        listeners = null;
     }
 
     public abstract boolean saveDeck( String filename, c_Deck deck, c_CardDB db );

@@ -29,7 +29,6 @@ package GUI;
 
 import Deck_Builder.Action;
 import Data.c_PriceDB;
-import Data.c_CastingCost;
 import Data.c_CardDB;
 import Data.c_Card;
 import Data.c_Deck;
@@ -40,13 +39,14 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import GUI.CardTable.DeckTableModel;
 import GUI.CardTable.PricesTableModel;
-import Data.c_Deck.CardLoading;
 import Data.c_Deck.WhichHalf;
 import Data.c_Deck.WhichType;
 import Data.c_ExpansionDB.Legals;
 import Data.c_Price;
 import Data.c_Price.PriceType;
+import Parsers.DeckFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import javax.swing.JPanel;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -56,7 +56,7 @@ import javax.swing.event.EventListenerList;
  *
  * @author Phillip
  */
-public class DeckTabPanel extends JPanel implements ActionListener {
+public class DeckTabPanel extends JPanel {
 
     private enum DeckInfo {
         NAME,
@@ -104,25 +104,20 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         m_priceDB = new c_PriceDB();
         initComponents();
         init();
-        m_deck.addActionListener( this );
     }
     public DeckTabPanel( c_CardDB db, c_PriceDB pdb ) {
         m_db = db;
         m_priceDB = pdb;
         initComponents();
         init();
-        m_deck.addActionListener( this );
     }
-    public DeckTabPanel( String deckfilepath, c_CardDB db, c_PriceDB pdb ) {
+    public DeckTabPanel( DeckFormat format, String deckfilepath, c_CardDB db, c_PriceDB pdb ) {
         super();
         m_db = db;
         m_priceDB = pdb;
         initComponents();
         init();
-        m_deck.addActionListener( this );
-        m_deck.loadDeckFromFile( deckfilepath );
-        m_filename = deckfilepath;
-        m_Misc_NotesText.setText( m_deck.getNotes() );
+        loadDeckFromFile( format, deckfilepath, db );
     }
     
     private void init() {
@@ -145,12 +140,41 @@ public class DeckTabPanel extends JPanel implements ActionListener {
         updateDeckInfo();
     }
 
+    private void loadDeckFromFile( DeckFormat format, String deckfilepath, c_CardDB db ) {
+        m_isLoading = true;
+
+        c_Deck deck = new c_Deck();
+        format.loadDeck( deckfilepath, deck, db );
+        m_deck.setDeckInfo( deck );
+
+        HashMap<Integer, Integer> cards = deck.getCards();
+        c_Card card;
+
+        for( int mid : cards.keySet() ) {
+            card = m_db.getCard( mid );
+            addCard( card, cards.get( mid ), true );
+        }
+
+        cards = deck.getSBCards();
+        for( int mid : cards.keySet() ) {
+            card = m_db.getCard( mid );
+            addCard( card, cards.get( mid ), false );
+        }
+
+        m_isLoading = false;
+        m_filename = deckfilepath;
+
+        deck = null;
+        cards = null;
+        card = null;
+    }
+
     public c_Deck getDeck() {
         return m_deck;
     }
 
-    public boolean saveDeck( String filepath ) {
-        m_isSaved = m_deck.saveDeck( filepath, m_db );
+    public boolean saveDeck( DeckFormat filter, String filepath ) {
+        m_isSaved = ((DeckFormat)filter).saveDeck( filepath, m_deck, m_db );
         if( m_isSaved ) {
             m_filename = filepath;
         }
@@ -191,8 +215,6 @@ public class DeckTabPanel extends JPanel implements ActionListener {
             m_priceCTM.updateCardAmount( card, new_amt, toDeck );
         }
         row = table.convertRowIndexToView( dtm.getMIDRow( card.MID ) );
-//        table.removeRowSelectionInterval( 0, table.getRowCount() );
-//        table.addRowSelectionInterval( row, row );
         table.changeSelection( row, 0, false, false );
 
         if( !m_isLoading ) {
@@ -228,37 +250,6 @@ public class DeckTabPanel extends JPanel implements ActionListener {
 
         dtm = null;
         row = null;
-    }
-
-    public void actionPerformed(ActionEvent e) {
-        if( e.getID() == Action.ACTION_DECK_LOAD_CARD
-            || e.getID() == Action.ACTION_DECK_SB_LOAD_LINE ) {
-            /* Card Name	Amt	Card Type	Sub-Type	Cost	P/T	Set	MID */
-            String line = e.getActionCommand();
-            String ary[] = line.split( "\t" );
-            c_Card card = new c_Card();
-            Integer amount = Integer.parseInt( ary[ CardLoading.AMOUNT.val ] );
-            card.Name = ary[ CardLoading.NAME.val ];
-            card.Type = ary[ CardLoading.TYPE.val ];
-            card.SubType = ary[ CardLoading.SUBTYPE.val ];
-            card.CastingCost = new c_CastingCost( ary[ CardLoading.COST.val ] );
-            card.PT = ary[ CardLoading.PT.val ].replaceAll( "'", "" );
-            card.Expansion = ary[ CardLoading.EXPANSION.val ];
-            card.MID = Integer.parseInt( ary[ CardLoading.MID.val ] );
-
-            boolean toDeck = ( e.getID() == Action.ACTION_DECK_LOAD_CARD );
-            m_isLoading = true;
-            addCard( card, amount, toDeck );
-            m_isLoading = false;
-
-            line = null;
-            ary = null;
-            card = null;
-            amount = null;
-        } else if( e.getID() == Action.ACTION_DECK_SAVED ) {
-            m_isSaved = true;
-            updateDeckInfo();
-        }
     }
 
     public Integer getSelectedCard() {

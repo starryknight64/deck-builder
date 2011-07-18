@@ -106,7 +106,13 @@ public class c_File {
         fop = null;
     }
 
-    public void read( Class _class, ActionListener listener, Integer action, String filepath, boolean asResource ) throws IOException {
+    public ArrayList<String> read( String filepath, boolean asResource ) throws IOException {
+        return read( null, null, null, filepath, asResource );
+    }
+
+    public ArrayList<String> read( Class _class, ActionListener listener, Integer action, String filepath, boolean asResource ) throws IOException {
+        ArrayList<String> lines = new ArrayList<String>();
+
         addActionListener( listener );
 
         if( asResource ) {
@@ -116,6 +122,7 @@ public class c_File {
             String line;
             while ((line = br.readLine()) != null) {
                 fireActionEvent( _class, action, line );
+                lines.add( line );
                 line = null;
             }
 
@@ -129,7 +136,6 @@ public class c_File {
             fr = new FileReader( filepath );
             scanner = new Scanner( fr );
             scanner.useDelimiter( "\r\n" );
-            ArrayList<String> lines = new ArrayList<String>();
 
             while( scanner.hasNext() ) {
                 lines.add( scanner.next() );
@@ -148,8 +154,9 @@ public class c_File {
             }
 
             fireActionEvent( _class, Action.ACTION_FILE_LOAD_DONE, Action.COMMAND_FILE_LOAD_DONE );
-            lines = null;
         }
+
+        return lines;
     }
 
     private void addActionListener( ActionListener listener ) {

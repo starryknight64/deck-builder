@@ -319,7 +319,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
             if( cmd == JFileChooser.APPROVE_OPTION ) {
                 try {
-                    m_leftPanel.loadDeck( dlg.getSelectedFile().getCanonicalPath() );
+                    m_leftPanel.loadDeck( (DeckFormat)dlg.getFileFilter(), dlg.getSelectedFile().getCanonicalPath() );
                 } catch( Exception ex ) {
                     Dialog.ErrorBox( this, ex.getStackTrace() );
                 }
@@ -369,7 +369,7 @@ public class MainWindow extends JFrame implements ActionListener {
 
         if( cmd == JFileChooser.APPROVE_OPTION || !isSaveAs ) {
             deck.getDeck().setName( deck.getDeckName() );
-            saveSuccess = ((DeckFormat)filter).saveDeck( filepath, m_leftPanel.getCurrentDeckTab().getDeck(), m_db );
+            saveSuccess = deck.saveDeck( (DeckFormat)filter, filepath );
         }
 
         if( saveSuccess ) {

@@ -21,23 +21,13 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. */
 
 package Data;
 
-import Deck_Builder.Action;
-import GUI.DeckTabPanel;
-import Deck_Builder.str;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.event.EventListenerList;
 
 /**
  *
  * @author Phillip
  */
-public class c_Deck implements ActionListener {
+public class c_Deck {
 
     public enum WhichHalf {
         DECK,
@@ -107,133 +97,15 @@ public class c_Deck implements ActionListener {
     private String m_name = "Untitled Deck";
     private String m_notes = "";
     private String m_creationDate = "";
-    
-    private boolean m_isLoadingDeckFile = false;
-    private DeckLoading m_currentPart;
 
-    private EventListenerList m_listeners = new EventListenerList();
-    
     public c_Deck() {
     }
 
-    public void loadDeckFromFile( String filepath ) {
-        m_isLoadingDeckFile = true;
-        m_currentPart = DeckLoading.NAME;
-        c_File file = new c_File();
-        try {
-            file.read(c_Deck.class, this, Action.ACTION_DECK_LOAD_CARD, filepath, false);
-        } catch (IOException ex) {
-            Logger.getLogger(c_Deck.class.getName()).log(Level.SEVERE, String.format( "Deck file '%s' could not be loaded!", filepath ), ex);
-        }
-        m_isLoadingDeckFile = false;
-        file = null;
-    }
-    
-    public boolean saveDeck( String filepath, c_CardDB db ) {
-        boolean saveSuccess = true;
-        String lines = "";
-        
-        lines += getLine( DeckLoading.NAME, m_name );
-        lines += getLine( DeckLoading.SIZE, getSizeOf( WhichHalf.BOTH ).toString() );
-        lines += getLine( DeckLoading.COLORS, getColorsText( db ) );
-        lines += getLine( DeckLoading.CREATION_DATE, m_creationDate );
-        lines += getLine( DeckLoading.MODIFICATIONS, m_modifications.toString() );
-        lines += getLine( DeckLoading.NOTES, m_notes );
-        lines += getLine( DeckLoading.DECK, "" );
-
-        c_Card card;
-        for( int mid : m_cards.keySet() ) {
-            card = db.getCard( mid );
-            lines += card.toString( m_cards.get( mid ) ) + "\r\n";
-        }
-
-        if( !m_SBcards.isEmpty() ) {
-            lines += getLine( DeckLoading.SIDEBOARD, "" );
-            for( int mid : m_SBcards.keySet() ) {
-                card = db.getCard( mid );
-                lines += card.toString( m_SBcards.get( mid ) ) + "\r\n";
-            }
-        }
-
-        c_File file = new c_File();
-        try {
-            file.write( filepath, lines );
-        } catch (FileNotFoundException ex) {
-            saveSuccess = false;
-            Logger.getLogger(c_Deck.class.getName()).log(Level.SEVERE, String.format( "File '%s' not found!", filepath ), ex);
-        } catch (IOException ex) {
-            saveSuccess = false;
-            Logger.getLogger(c_Deck.class.getName()).log(Level.SEVERE, String.format( "Error writing to '%s'", filepath ), ex);
-        }
-
-        if( saveSuccess ) {
-            fireActionEvent( DeckTabPanel.class, Action.ACTION_DECK_SAVED, null );
-        }
-
-        file = null;
-        card = null;
-        lines = null;
-        return saveSuccess;
-    }
-    
-    private String getLine( DeckLoading which, String value ) {
-        return which.toString() + value + "\r\n";
-    }
-    
-    public void actionPerformed( ActionEvent e ) {
-        if( e.getID() == Action.ACTION_DECK_LOAD_CARD ) {
-            String line = e.getActionCommand();
-            
-            if( ( line.startsWith( m_currentPart.toString() ) || line.startsWith( "Cards:" ) )
-                && m_currentPart != DeckLoading.DECK
-                && m_currentPart != DeckLoading.SIDEBOARD ) {
-                if( m_currentPart == DeckLoading.NAME ) {
-                    m_name = str.rightOf( line, DeckLoading.NAME.toString() );
-                    m_currentPart = DeckLoading.SIZE;
-                } else if( m_currentPart == DeckLoading.SIZE ) {
-                    /* This is calculated, move along */
-                    m_currentPart = DeckLoading.COLORS;
-                } else if( m_currentPart == DeckLoading.COLORS ) {
-                    /* This is also calculated, keep moving */
-                    m_currentPart = DeckLoading.CREATION_DATE;
-                } else if( m_currentPart == DeckLoading.CREATION_DATE ) {
-                    m_creationDate = str.rightOf( line, DeckLoading.CREATION_DATE.toString() );
-                    m_currentPart = DeckLoading.MODIFICATIONS;
-                } else if( m_currentPart == DeckLoading.MODIFICATIONS ) {
-                    m_modifications = Integer.parseInt( str.rightOf( line, DeckLoading.MODIFICATIONS.toString() ) );
-                    m_currentPart = DeckLoading.NOTES;
-                } else if( m_currentPart == DeckLoading.NOTES ) {
-                    if( !line.equals( DeckLoading.NOTES.toString() ) ) {
-                        m_notes += str.rightOf( line, DeckLoading.NOTES.toString() ) + "\r\n";
-                    } else {
-                        m_currentPart = DeckLoading.DECK;
-                    }
-                }
-            } else if( m_currentPart == DeckLoading.NOTES ) {
-                if( line.startsWith( DeckLoading.DECK.toString() )
-                    || line.startsWith( DeckLoading.DECK_OLD.toString() ) ) {
-                    m_currentPart = DeckLoading.DECK;
-                    return;
-                }
-                m_notes += line + "\r\n";
-            } else if( m_currentPart == DeckLoading.DECK ) {
-                if( line.startsWith( DeckLoading.SIDEBOARD.toString() ) ) {
-                    m_currentPart = DeckLoading.SIDEBOARD;
-                    return;
-                } else if( line.startsWith( DeckLoading.DECK.toString() )
-                        || line.startsWith( DeckLoading.DECK_OLD.toString() ) ) {
-                    return;
-                }
-
-                if( !line.equals( "" ) ) {
-                    fireActionEvent( DeckTabPanel.class, Action.ACTION_DECK_LOAD_CARD, line );
-                }
-            } else if( m_currentPart == DeckLoading.SIDEBOARD ) {
-                if( !line.equals( "" ) ) {
-                    fireActionEvent( DeckTabPanel.class, Action.ACTION_DECK_SB_LOAD_LINE, line );
-                }
-            }
-        }
+    public void setDeckInfo( c_Deck deck ) {
+        m_name = deck.getName();
+        m_modifications = deck.getModifications();
+        m_creationDate = deck.getCreationDate();
+        m_notes = deck.getNotes();
     }
 
     public String getCreationDate() {
@@ -365,23 +237,5 @@ public class c_Deck implements ActionListener {
         HashMap<Integer, Integer> cards = getCards();
         cards.putAll( getSBCards() );
         return cards;
-    }
-
-    public void addActionListener( ActionListener listener ) {
-        m_listeners.add( ActionListener.class, listener );
-    }
-
-    private void fireActionEvent( Class thisClass, Integer action, String command ) {
-        Object listeners[] = m_listeners.getListenerList();
-        for( int i=listeners.length-1; i>=0; i-- ) {
-            if( listeners[i].getClass() == thisClass ) {
-                ((ActionListener)listeners[i]).actionPerformed( new ActionEvent( this, action, command ) );
-
-                listeners = null;
-                return;
-            }
-        }
-
-        listeners = null;
     }
 }
