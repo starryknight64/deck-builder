@@ -140,22 +140,26 @@ public class CardTable extends JTable {
         };
         Comparator<String> pt_comparator = new Comparator<String>() {
             public int compare( String o1, String o2 ) {
-                if( o1.length() <= 2 || o2.length() <= 2 ) {
+                try {
+                    if( o1.length() <= 2 || o2.length() <= 2 ) {
+                        return o1.compareTo( o2 );
+                    }
+
+                    String pt1[] = o1.split( "/" );
+                    String pt2[] = o2.split( "/" );
+                    Integer p1 = Integer.parseInt( pt1[ 0 ] );
+                    Integer p2 = Integer.parseInt( pt2[ 0 ] );
+                    Integer t1 = Integer.parseInt( pt1[ 1 ] );
+                    Integer t2 = Integer.parseInt( pt2[ 1 ] );
+
+                    int cmp = p1.compareTo( p2 );
+                    if( cmp == 0 ) {
+                        cmp = t1.compareTo( t2 );
+                    }
+                    return cmp;
+                } catch( Exception ex ) {
                     return o1.compareTo( o2 );
                 }
-
-                String pt1[] = o1.split( "/" );
-                String pt2[] = o2.split( "/" );
-                Integer p1 = Integer.parseInt( pt1[ 0 ] );
-                Integer p2 = Integer.parseInt( pt2[ 0 ] );
-                Integer t1 = Integer.parseInt( pt1[ 1 ] );
-                Integer t2 = Integer.parseInt( pt2[ 1 ] );
-                
-                int cmp = p1.compareTo( p2 );
-                if( cmp == 0 ) {
-                    cmp = t1.compareTo( t2 );
-                }
-                return cmp;
             }
         };
         Comparator<ImageIcon> cmc_comparator = new Comparator<ImageIcon>() {

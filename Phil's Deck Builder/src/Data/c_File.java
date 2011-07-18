@@ -70,9 +70,13 @@ public class c_File {
     public static String setExtension( String filepath, String extension ) {
         String ext = getExtension( filepath.toLowerCase() );
         String fpath = filepath;
-        if( ext.length() > 0 ) {
+
+        if( !ext.equals( "" ) ) {
             fpath = filepath.replace( "." + ext, "." + extension );
+        } else {
+            fpath += "." + extension;
         }
+
         return fpath;
     }
 
