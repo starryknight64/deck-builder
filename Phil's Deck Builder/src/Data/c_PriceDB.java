@@ -53,7 +53,6 @@ public class c_PriceDB implements ActionListener {
     }
 
     private static final String PRICES_FILE = "Prices.txt";
-    private static final String ACRONYMS_FILE = "/resources/Acronyms.txt";
                  /* Card Name is String */
     private HashMap<String, c_PriceEntry> m_prices = new HashMap<String, c_PriceEntry>();
     private c_ExpansionDB m_expansionDB;
