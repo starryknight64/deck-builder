@@ -40,7 +40,10 @@ import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import GUI.CardTable.RecentlyViewedTableModel;
 import Parsers.DeckFormat;
+import java.awt.event.MouseEvent;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.event.EventListenerList;
 
 /**
@@ -304,6 +307,12 @@ public class LeftPanel extends JPanel implements ActionListener {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 m_CardPreview_ImageMouseClicked(evt);
             }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                m_CardPreview_ImageMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                m_CardPreview_ImageMouseReleased(evt);
+            }
         });
         m_CardPreview_Panel.add(m_CardPreview_Image, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, 223, 310));
 
@@ -465,6 +474,29 @@ public class LeftPanel extends JPanel implements ActionListener {
     private void m_RecentlyViewed_TableMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_m_RecentlyViewed_TableMouseReleased
         previewCardSelected( false );
     }//GEN-LAST:event_m_RecentlyViewed_TableMouseReleased
+
+    private void m_CardPreview_ImageMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_m_CardPreview_ImageMousePressed
+        cardPreview_PopUp_Menu( evt );
+    }//GEN-LAST:event_m_CardPreview_ImageMousePressed
+
+    private void m_CardPreview_ImageMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_m_CardPreview_ImageMouseReleased
+        cardPreview_PopUp_Menu( evt );
+    }//GEN-LAST:event_m_CardPreview_ImageMouseReleased
+
+    private void cardPreview_PopUp_Menu( MouseEvent e ) {
+        JMenuItem item = new JMenuItem("clicky");
+        JPopupMenu pop = new JPopupMenu();
+        pop.add( item );
+        item.addActionListener( new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Dialog.MsgBox(null, "clicked!");
+            }
+        } );
+        pop.show( e.getComponent(), e.getX(), e.getY() );
+        
+        item = null;
+        pop = null;
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;

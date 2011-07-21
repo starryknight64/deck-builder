@@ -25,10 +25,12 @@ import Deck_Builder.Action;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -95,19 +97,35 @@ public class c_File {
         return filename;
     }
 
+    public void append( String filepath, String data ) throws FileNotFoundException, IOException {
+        write_to_file( filepath, data, true );
+    }
+
     public void write( String filepath, String data ) throws FileNotFoundException, IOException {
-        File f = new File( removeInvalidFilenameChars( filepath ) );
-        FileOutputStream fop = new FileOutputStream( f );
-        PrintStream ps = new PrintStream( fop );
+//        File f = new File( removeInvalidFilenameChars( filepath ) );
+//        FileOutputStream fop = new FileOutputStream( f );
+//        PrintStream ps = new PrintStream( fop );
+//
+//        if( f.exists() ) {
+//            ps.print( data );
+//            ps.close();
+//            fop.close();
+//        }
+//
+//        f = null;
+//        fop = null;
+//        ps = null;
+        write_to_file( filepath, data, false );
+    }
 
-        if( f.exists() ) {
-            ps.print( data );
-            ps.close();
-            fop.close();
-        }
+    private void write_to_file( String filepath, String data, boolean append ) throws FileNotFoundException, IOException {
+        FileWriter fw = new FileWriter( removeInvalidFilenameChars( filepath ), append );
+        BufferedWriter out = new BufferedWriter( fw );
+        out.write( data );
+        out.close();
 
-        f = null;
-        fop = null;
+        out = null;
+        fw = null;
     }
 
     public ArrayList<String> read( String filepath, boolean asResource ) throws IOException {

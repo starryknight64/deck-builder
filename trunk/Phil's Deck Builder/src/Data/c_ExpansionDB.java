@@ -23,6 +23,7 @@ package Data;
 
 import Deck_Builder.Action;
 import Data.c_Expansion.Acronym;
+import Deck_Builder.Dialog;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ public class c_ExpansionDB implements ActionListener {
     private HashMap<Integer, c_Expansion> m_expansions = new HashMap<Integer, c_Expansion>();
     
                  /* Keys are hashcodes of Acronyms strings, values are EID's */
+    private HashMap<Integer, Integer> m_magicCardsInfoAcronyms = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> m_traderAcronyms = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> m_workstationAcronyms = new HashMap<Integer, Integer>();
     private HashMap<Integer, Integer> m_gathererAcronyms = new HashMap<Integer, Integer>();
@@ -89,6 +91,7 @@ public class c_ExpansionDB implements ActionListener {
             updateLegals();
         } catch ( Exception ex ) {
             success = false;
+            Dialog.ErrorBox( null, ex.getStackTrace() );
         }
         file = null;
         m_loadingListener = null;
@@ -100,6 +103,7 @@ public class c_ExpansionDB implements ActionListener {
         m_otherLegalsExpansions.put( Legals.Extended, new ArrayList<Integer>() );
         m_otherLegalsExpansions.put( Legals.Legacy,   new ArrayList<Integer>() );
         m_otherLegalsExpansions.put( Legals.Vintage,  new ArrayList<Integer>() );
+        m_lookups.add( m_magicCardsInfoAcronyms );
         m_lookups.add( m_traderAcronyms );
         m_lookups.add( m_workstationAcronyms );
         m_lookups.add( m_gathererAcronyms );
@@ -173,7 +177,7 @@ public class c_ExpansionDB implements ActionListener {
     }
 
     public void actionPerformed( ActionEvent e ) {
-        if( e.getID() == Action.ACTION_EXPANSION_LOAD_LINE && !e.getActionCommand().startsWith( "Trader\t" )  ) {
+        if( e.getID() == Action.ACTION_EXPANSION_LOAD_LINE && !e.getActionCommand().startsWith( "MagicCards.info\t" )  ) {
             c_Expansion exp = new c_Expansion( e.getActionCommand().split( "\t" ) );
             Integer eid = m_expansions.size();
             m_expansions.put( eid, exp );

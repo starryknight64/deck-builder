@@ -87,9 +87,11 @@ public class c_CastingCost extends c_Colors {
                 if( isDigit ) {
                     isDigit = false;
                     temp += ",";
-                } else if( ch == 'P' ) { /* Handles Phyrexian symbols */
-                    temp += ch;
-                    ch = glyphs.charAt( i + 1 );
+                } else if( i + 1 < glyphs.length() ) {
+                    if( glyphs.charAt( i + 1 ) == 'P' ) { /* Handles Phyrexian symbols */
+                        temp += ch + 'P';
+                        i++;
+                    }
                 }
                 temp += ch + ",";
             }
@@ -100,10 +102,14 @@ public class c_CastingCost extends c_Colors {
         return temp;
     }
 
+    public String getDBString() {
+        return this.toString().replace( ",", "" );
+    }
+
     @Override
     public String toString() {
         String glyphs = "";
-        for (int i = 0; i < m_glyphs.size(); i++) {
+        for( int i=0; i<m_glyphs.size(); i++ ) {
             glyphs += m_glyphs.get(i);
             if (i + 1 < m_glyphs.size()) {
                 glyphs += ",";

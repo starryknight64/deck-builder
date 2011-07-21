@@ -38,6 +38,9 @@ public class c_Card {
     public static final Integer WIDTH = 223;
     public static final Integer HEIGHT = 310;
 
+    private static final int MIN_COLS_REQUIRED_FOR_CREATURES_PLANESWALKERS = DBCol.Toughness.val + 1;
+    private static final int MIN_COLS_REQUIRED_FOR_NON_CREATURES           = DBCol.Expansion.val + 1;
+
     public String Name;
     public String Type;
     public String SubType;
@@ -58,8 +61,17 @@ public class c_Card {
 
     public c_Card( String[] dbRow ) {
         if( dbRow.length != DBCol.values().length ) {
-            int i =0;
-            return;
+            // We are attempting to parse a row that was added to the DB by the deck builder (or by a human I suppose)
+            if( dbRow.length >= MIN_COLS_REQUIRED_FOR_NON_CREATURES && dbRow.length < MIN_COLS_REQUIRED_FOR_CREATURES_PLANESWALKERS ) {
+                // Let's hope it's a non-creature type
+                // If it is a creature type, then we don't have enough columns!
+                // Note that String.split ignores trailing whitespace, which includes tabs
+                String type = dbRow[ DBCol.Type.val ].toLowerCase();
+                if( type.contains( "creature" ) || type.contains( "planeswalker" ) ) {
+                    int i =0;
+                    return;
+                }
+            }
         }
 
         Name = dbRow[ DBCol.Name.val ];
@@ -77,10 +89,14 @@ public class c_Card {
             SubType = "";
         }
 
-        String p = dbRow[ DBCol.Power.val ];
-        String t = dbRow[ DBCol.Toughness.val ];
-        if( p.length() > 0 && t.length() > 0 ) {
-            PT = p + "/" + t;
+        if( dbRow.length >= MIN_COLS_REQUIRED_FOR_CREATURES_PLANESWALKERS ) {
+            String p = dbRow[ DBCol.Power.val ];
+            String t = dbRow[ DBCol.Toughness.val ];
+            if( p.length() > 0 && t.length() > 0 ) {
+                PT = p + "/" + t;
+            } else {
+                PT = "";
+            }
         } else {
             PT = "";
         }
@@ -88,6 +104,49 @@ public class c_Card {
         CastingCost = new c_CastingCost( c_CastingCost.tokenize( dbRow[ DBCol.Cost.val ] ) );
         Expansion = dbRow[ DBCol.Expansion.val ];
         MID = Integer.parseInt( dbRow[ DBCol.MID.val ] );
+    }
+
+    public String getDBRow() {
+        String row = "";
+
+        //ID	Language	Name	Alt	Cost	Type	Set	Rarity	P	T	Oracle Rules	Printed Name	Printed Type	Printed Rules	Flavor Text	Card #	Artist	Printings
+        row += this.MID.toString() + "\t";              //MID
+        row += "English" + "\t";                        //Language
+        row += this.Name + "\t";                        //Name
+        row += "" + "\t";                               //Alt
+        row += this.CastingCost.getDBString() + "\t";   //Cost
+        row += this.getFullType() + "\t";               //Type
+        row += this.Expansion + "\t";                   //Set
+        row += "" + "\t";                               //Rarity
+        row += this.getPower() + "\t";                  //Power
+        row += this.getToughness() + "\t";              //Toughness
+
+        //Oracle Rules	Printed Name	Printed Type	Printed Rules	Flavor Text	Card #	Artist	Printings
+        for( int i=0; i<7; i++ ) {
+            row += "\t";
+        }
+
+        return row;
+    }
+
+    public String getFullType() {
+        return Type + ( SubType.equals( "" ) ? "" : " - " + SubType );
+    }
+
+    public String getPower() {
+        String power = "";
+        if( !PT.equals( "" ) ) {
+            power = PT.split( "/" )[ 0 ];
+        }
+        return power;
+    }
+
+    public String getToughness() {
+        String toughness = "";
+        if( !PT.equals( "" ) ) {
+            toughness = PT.split( "/" )[ 1 ];
+        }
+        return toughness;
     }
 
     public void setCard( c_Card card ) {

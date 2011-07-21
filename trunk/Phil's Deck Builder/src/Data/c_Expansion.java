@@ -41,6 +41,7 @@ When searching DB by name/expansion, search the specified expansion for the spec
  * @author Phillip
  */
 public class c_Expansion {
+    private String m_magicCardsInfoAcronym;
     private String m_traderAcronym;
     private String m_workstationAcronym;
     private String m_gathererAcronym;
@@ -50,11 +51,12 @@ public class c_Expansion {
     private Date m_date;
     
     public c_Expansion( String[] expLine ) {
-        m_traderAcronym      = expLine[ Acronym.Trader.val ];
-        m_workstationAcronym = expLine[ Acronym.Workstation.val ];
-        m_gathererAcronym    = expLine[ Acronym.Gatherer.val ];
-        m_expansion          = expLine[ Expansion.Name.val ];
-        m_isCore             = expLine[ Expansion.isCore.val ].equalsIgnoreCase( "Yes" );
+        m_magicCardsInfoAcronym = expLine[ Acronym.MagicCardsInfo.val ];
+        m_traderAcronym         = expLine[ Acronym.Trader.val ];
+        m_workstationAcronym    = expLine[ Acronym.Workstation.val ];
+        m_gathererAcronym       = expLine[ Acronym.Gatherer.val ];
+        m_expansion             = expLine[ Expansion.Name.val ];
+        m_isCore                = expLine[ Expansion.isCore.val ].equalsIgnoreCase( "Yes" );
 
         if( !expLine[ Expansion.Date.val ].equals( "?" ) ) {
             try {
@@ -91,10 +93,12 @@ public class c_Expansion {
     }
     
     public String[] getAllAcronyms() {
-        return new String[] { m_traderAcronym, m_workstationAcronym, m_gathererAcronym };
+        return new String[] { m_magicCardsInfoAcronym, m_traderAcronym, m_workstationAcronym, m_gathererAcronym };
     }
     public String getAcronym( Acronym which ) {
-        if( which.equals( Acronym.Workstation ) ) {
+        if( which.equals( Acronym.MagicCardsInfo ) ) {
+            return m_magicCardsInfoAcronym;
+        } else if( which.equals( Acronym.Workstation ) ) {
             return m_workstationAcronym;
         } else if( which.equals( Acronym.Trader ) ) {
             return m_traderAcronym;
@@ -110,6 +114,7 @@ public class c_Expansion {
     }
     
     public enum Acronym {
+        MagicCardsInfo,
         Trader,
         Workstation,
         Gatherer;
