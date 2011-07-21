@@ -28,9 +28,13 @@ import GUI.WebBrowserPanel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.commons.io.FileUtils;
 
 /**
@@ -40,8 +44,11 @@ import org.apache.commons.io.FileUtils;
 public class c_CardDB implements ActionListener {
     private static final String CARD_DB_FILE = "db.txt";
     private HashMap<Integer, c_Card> m_cards = new HashMap<Integer, c_Card>();
+    private ArrayList<Integer> m_cardsToSave = new ArrayList<Integer>();
     private c_ExpansionDB m_expansionDB;
     private ActionListener m_loadingListener = null;
+
+    private boolean m_isLoadingDB = false;
     
                  /* CardName         Expansion    MID */
     private HashMap<Integer, HashMap<c_Expansion, Integer>> m_cardNamesToMIDs = new HashMap<Integer, HashMap<c_Expansion, Integer>>();
@@ -51,16 +58,50 @@ public class c_CardDB implements ActionListener {
     public c_CardDB( c_ExpansionDB exp ) {
         m_expansionDB = exp;
     }
+
+    public boolean saveNewCards() {
+        boolean success = true;
+
+        if( m_cardsToSave.size() > 0 ) {
+            String lines = "";
+            c_File file = new c_File();
+            c_Card card;
+
+            for( Integer mid : m_cardsToSave ) {
+                card = m_cards.get( mid );
+                lines += card.getDBRow() + "\r\n";
+            }
+
+            try {
+                file.append( CARD_DB_FILE, lines );
+            } catch (FileNotFoundException ex) {
+                Logger.getLogger(c_CardDB.class.getName()).log(Level.SEVERE, null, ex);
+                success = false;
+            } catch (IOException ex) {
+                Logger.getLogger(c_CardDB.class.getName()).log(Level.SEVERE, null, ex);
+                success = false;
+            }
+
+            file = null;
+            card = null;
+        }
+
+        return success;
+    }
     
     public boolean loadCardDB( ActionListener listener ) {
         boolean success = true;
         m_loadingListener = listener;
         c_File file = new c_File();
         try {
+            m_isLoadingDB = true;
             file.read( this.getClass(), this, Action.ACTION_CARDS_DB_LOAD_LINE, CARD_DB_FILE, false );
         } catch( Exception ex ) {
             success = false;
+            m_isLoadingDB = false;
         }
+
+        m_isLoadingDB = false;
         file = null;
         m_loadingListener = null;
         return success;
@@ -191,6 +232,10 @@ public class c_CardDB implements ActionListener {
 
     public boolean addCard( c_Card card, HashMap<c_Expansion, Integer> list ) {
         if( !contains( card.MID ) ) {
+            if( !m_isLoadingDB ) {
+                m_cardsToSave.add( card.MID );
+            }
+            
             m_cards.put( card.MID, card );
             if( contains( card.Name ) ) {
                 m_cardNamesToMIDs.get( card.Name.hashCode() ).putAll( list );
@@ -203,6 +248,10 @@ public class c_CardDB implements ActionListener {
     }
     public boolean addCard( c_Card card ) {
         if( !contains( card.MID ) ) {
+            if( !m_isLoadingDB ) {
+                m_cardsToSave.add( card.MID );
+            }
+
             m_cards.put( card.MID, card );
             if( contains( card.Name ) ) {
                 m_cardNamesToMIDs.get( card.Name.hashCode() ).put( m_expansionDB.getExpansion( card.Expansion ), card.MID );

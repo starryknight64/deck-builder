@@ -82,6 +82,7 @@ public class MainWindow extends JFrame implements ActionListener {
                     /* if, during the close, the user decided to cancel, then don't exit the program */
                     return;
                 }
+                m_db.saveNewCards();
                 dispose();
                 System.exit(0);
             }
