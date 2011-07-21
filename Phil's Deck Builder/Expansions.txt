@@ -1,137 +1,172 @@
-Trader	MWS	Gatherer	Expansion	Core	Block	Date
-A	A	LEA 	Limited Edition Alpha	Yes	?	8/5/1993
-B	B	LEB 	Limited Edition Beta	Yes	?	10/1/1993
-U	U	2ED 	Unlimited Edition	Yes	?	12/1/1993
-AN	AN	ARN 	Arabian Nights	No	Early Expansions	12/1/1993
-AQ	AQ	ATQ 	Antiquities	No	Early Expansions	3/1/1994
-RV	R	3ED 	Revised Edition	Yes	?	4/1/1994
-LE	LG	LEG 	Legends	No	Early Expansions	6/1/1994
-DK	DK	DRK 	The Dark	No	Early Expansions	8/1/1994
-FE	FE	FEM 	Fallen Empires	No	Early Expansions	11/1/1994
-4TH	4E	4ED 	Fourth Edition	Yes	?	4/1/1995
-IA	IA	ICE 	Ice Age	No	Ice Age	6/1/1995
-CH	CH	CHR	Chronicles	No	?	7/1/1995
-HL	HL	HML 	Homelands	No	Early Expansions	10/1/1995
-?	I2P	?	Rivals Quick Start Set	No	?	7/1/1996
-AI	AL	ALL 	Alliances	No	Ice Age	6/10/1996
-MI	MI	MIR 	Mirage	No	Mirage	10/8/1996
-VI	VI	VIS 	Visions	No	Mirage	2/3/1997
-5TH	5E	5ED 	Fifth Edition	Yes	?	3/24/1997
-PT	PT	POR	Portal	No	Portal	6/1/1997
-WL	WL	WTH 	Weatherlight	No	Mirage	6/9/1997
-TE	TE	TMP 	Tempest	No	Tempest	10/14/1997
-ST	SH	STH 	Stronghold	No	Tempest	3/2/1998
-P2	P2	P02	Portal Second Age	No	Portal	6/1/1998
-EX	EX	EXO 	Exodus	No	Tempest	6/15/1998
-UG	UG	UGL	Unglued	No	?	8/17/1998
-UZ	US	USG 	Urza's Saga	No	Urza	10/12/1998
-?	AT	ATH	Anthologies	No	?	11/1/1998
-UL	UL	ULG 	Urza's Legacy	No	Urza	2/15/1999
-6TH	6E	6ED 	Classic Sixth Edition	Yes	?	4/28/1999
-UD	UD	UDS 	Urza's Destiny	No	Urza	6/7/1999
-P3	P3	PTK	Portal Three Kingdoms	No	Portal	7/1/1999
-ST1	ST	S99	Starter 1999	No	Starter	7/1/1999
-MM	MM	MMQ 	Mercadian Masques	No	Masques	10/4/1999
-?	BRB	BRB	Battle Royale Box Set	No	?	11/12/1999
-NE	NE	NMS 	Nemesis	No	Masques	2/14/2000
-PR	PY	PCY 	Prophecy	No	Masques	6/5/2000
-ST2	S00	S00	Starter 2000	No	Starter	7/1/2000
-IN	IN	INV 	Invasion	No	Invasion	10/2/2000
-BD	BD	BTD	Beatdown Box Set	No	?	12/1/2000
-PS	PS	PLS 	Planeshift	No	Invasion	2/5/2001
-7TH	7E	7ED 	Seventh Edition	Yes	Starter	4/11/2001
-AP	AP	APC 	Apocalypse	No	Invasion	5/26/2001
-OD	OD	ODY 	Odyssey	No	Odyssey	9/22/2001
-DM	DM	DKM	Deckmasters	No	?	12/1/2001
-TOR	TO	TOR 	Torment	No	Odyssey	2/4/2002
-JUD	JU	JUD 	Judgment	No	Odyssey	5/27/2002
-ONS	ON	ONS 	Onslaught	No	Onslaught	10/7/2002
-LGN	LE	LGN 	Legions	No	Onslaught	1/25/2003
-SCG	SC	SCG 	Scourge	No	Onslaught	5/26/2003
-8TH	8E	8ED 	Eighth Edition	Yes	?	7/28/2003
-MRD	MR	MRD 	Mirrodin	No	Mirrodin	10/3/2003
-DST	DS	DST 	Darksteel	No	Mirrodin	2/6/2004
-5DN	FD	5DN 	Fifth Dawn	No	Mirrodin	6/4/2004
-CHK	CHK	CHK 	Champions of Kamigawa	No	Kamigawa	10/1/2004
-UNH	UNH	UNH	Unhinged	No	?	11/19/2004
-BOK	BOK	BOK 	Betrayers of Kamigawa	No	Kamigawa	2/4/2005
-SOK	SOK	SOK 	Saviors of Kamigawa	No	Kamigawa	6/3/2005
-9TH	9E	9ED 	Ninth Edition	Yes	?	7/29/2005
-?	MAE	?	Magic Encyclopedia	No	?	8/22/2005
-RAV	RAV	RAV 	Ravnica: City of Guilds	No	Ravnica	10/7/2005
-GPT	GP	GPT 	Guildpact	No	Ravnica	2/3/2006
-DIS	DIS	DIS 	Dissension	No	Ravnica	5/5/2006
-?	CST	?	Coldsnap Theme Decks	No	?	7/9/2006
-CSP	CS	CSP 	Coldsnap	No	Ice Age	7/21/2006
-TSP	TSP	TSP	Time Spiral	No	Time Spiral	10/6/2006
-TSB	TSB	TSB	"Time Spiral ""Timeshifted"""	No	?	10/6/2006
-PLC	PLC	PLC	Planar Chaos	No	Time Spiral	2/2/2007
-FUT	FUT	FUT 	Future Sight	No	Time Spiral	5/4/2007
-10TH	10E	10E 	Tenth Edition	Yes	?	7/14/2007
-MED	?	MED	Masters Edition	No	?	9/10/2007
-LRW	LRW	LRW 	Lorwyn	No	Lorwyn	10/12/2007
-?	EVG	EVG	Duel Decks: Elves vs. Goblins	No	?	11/16/2007
-MOR	MOR	MOR 	Morningtide	No	Lorwyn	2/1/2008
-SHM	SHM	SHM 	Shadowmoor	No	Shadowmoor	5/2/2008
-EVE	EVE	EVE 	Eventide	No	Shadowmoor	7/25/2008
-?	DRB	FVD	From the Vault: Dragons	No	?	8/29/2008
-?	?	ME2	Masters Edition II	No	?	9/22/2008
-ALA	ALA	ALA 	Shards of Alara	No	Shards of Alara	10/3/2008
-?	DD2	DD2 	Duel Decks: Jace vs. Chandra	No	?	11/7/2008
-CFX	CFX	CON 	Conflux	No	Shards of Alara	2/6/2009
-?	DDC	DDC 	Duel Decks: Divine vs. Demonic	No	?	4/10/2009
-ARB	ARB	ARB 	Alara Reborn	No	Shards of Alara	4/30/2009
-M10	M10	M10 	Magic 2010	Yes	?	7/17/2009
-?	V09	FVE	From the Vault: Exiled	No	?	8/28/2009
-?	HOP	HOP	Planechase	No	?	9/4/2009
-?	?	ME3	Masters Edition III	No	?	9/7/2009
-ZEN	ZEN	ZEN 	Zendikar	No	Zendikar	10/2/2009
-?	DDD	DDD 	Duel Decks: Garruk vs. Liliana	No	?	10/30/2009
-?	H09	H09	Premium Deck Series: Slivers	No	?	11/20/2009
-WWK	WWK	WWK 	Worldwake	No	Zendikar	2/5/2010
-?	DDE	DDE 	Duel Decks: Phyrexia vs. the Coalition	No	?	3/19/2010
-ROE	ROE	ROE 	Rise of the Eldrazi	No	Zendikar	4/23/2010
-?	DPA	?	Duels of the Planeswalker	No	?	6/4/2010
-AR	ARC	ARC	Archenemy	No	?	6/18/2010
-M11	M11	M11 	Magic 2011	Yes	?	7/16/2010
-?	V10	FVR	From the Vault: Relics	No	?	8/27/2010
-?	DDF	DDF 	Duel Decks: Elspeth vs. Tezzeret	No	?	9/3/2010
-?	SOM	SOM 	Scars of Mirrodin	No	Scars of Mirrodin	10/1/2010
-?	PD2	PD2	Premium Deck Series: Fire and Lightning	No	?	11/19/2010
-?	?	ME4	Masters Edition IV	No	?	1/10/2011
-MBS	MBS	MBS 	Mirrodin Besieged	No	Scars of Mirrodin	2/4/2011
-?	?	M12	Magic 2012	Yes	?	7/15/2011
-NPH	NPH	NPH	New Phyrexia	No	Scars of Mirrodin	5/13/2011
-DCI	?	?	Friday Night Magic	No	?	?
-BK	?	?	Media Inserts	No	?	?
-PRE	?	?	Promo set for Gatherer	No	?	?
-TK	?	?	Token	No	?	?
-?	?	?	Vanguard	No	?	?
-?	FBP	?	Full Box Promotion	No	?	?
-?	MPS	?	Magic Premiere Shop	No	?	?
-?	THG	?	Two-Headed Giant Promos	No	?	?
-?	SUM	?	Summer of Magic Promos	No	?	?
-?	HHL	?	Happy Holidays Promos	No	?	?
-?	ARE	?	Arena League Promos	No	?	?
-?	WLD	?	World Championship Cards	No	?	?
-?	PTR	?	Pro Tour Promos	No	?	?
-?	GPX	?	Grand Prix Promos	No	?	?
-?	FNM	?	Friday Night Magic Promos	No	?	?
-?	LND	?	Alternate Art Lands	No	?	?
-?	MGD	?	Magic Game Day	No	?	?
-?	JGC	?	Judge Gift Cards	No	?	?
-?	CHP	?	Champs Promos	No	?	?
-?	GTW	?	Gateway & WPN Promos	No	?	?
-?	PRE	?	Prerelease Promos	No	?	?
-?	REL	?	Release & Launch Parties	No	?	?
-?	MPR	?	Magic Player Rewards	No	?	?
-?	CVP	?	Convention Promos	No	?	?
-?	JUN	?	Junior Series Promos	No	?	?
-?	GAM	?	Video Game Promos	No	?	?
-?	STO	?	Stores Promos	No	?	?
-?	MIN	?	Magazine Inserts	No	?	?
-?	CIN	?	Comic Inserts	No	?	?
-?	BIN	?	Book Inserts	No	?	?
-?	GAR	?	Richard Garfield Events	No	?	?
-?	DLM	?	DCI Legend Membership	No	?	?
-?	PR	?	Other Promos	No	?	?
+MagicCards.info	Trader	MWS	Gatherer	Expansion	Core	Block	Date
+uhaa	?	?	?	Unhinged Alternate Foils	No	?	?
+mgbc	?	?	?	Multiverse Gift Box Cards	No	?	?
+8eb	?	?	?	Eighth Edition Box Set	No	?	?
+9eb	?	?	?	Ninth Edition Box Set	No	?	?
+cmd	?	?	?	Commander	No	?	6/17/2011
+?	DCI	?	?	Friday Night Magic	No	?	?
+?	BK	?	?	Media Inserts	No	?	?
+?	PRE	?	?	Promo set for Gatherer	No	?	?
+?	TK	?	?	Token	No	?	?
+?	?	?	?	Vanguard	No	?	?
+?	?	FBP	?	Full Box Promotion	No	?	?
+?	?	MPS	?	Magic Premiere Shop	No	?	?
+thgt	?	THG	?	Two-Headed Giant Promos	No	?	?
+sum	?	SUM	?	Summer of Magic Promos	No	?	4/1/1994
+hho	?	HHL	?	Happy Holidays Promos	No	?	?
+arena	?	ARE	?	Arena League Promos	No	?	?
+?	?	WLD	?	World Championship Cards	No	?	?
+pro	?	PTR	?	Pro Tour Promos	No	?	?
+gpx	?	GPX	?	Grand Prix Promos	No	?	?
+fnmp	?	FNM	?	Friday Night Magic Promos	No	?	?
+?	?	LND	?	Alternate Art Lands	No	?	?
+mgdc	?	MGD	?	Magic Game Day	No	?	?
+jr	?	JGC	?	Judge Gift Cards	No	?	?
+cp	?	CHP	?	Champs Promos	No	?	?
+grc	?	GTW	?	Gateway & WPN Promos	No	?	?
+ptc	?	PRE	?	Prerelease Promos	No	?	?
+?	?	REL	?	Release & Launch Parties	No	?	?
+mprp	?	MPR	?	Magic Player Rewards	No	?	?
+?	?	CVP	?	Convention Promos	No	?	?
+jsr	?	JUN	?	Junior Series Promos	No	?	?
+?	?	GAM	?	Video Game Promos	No	?	?
+?	?	STO	?	Stores Promos	No	?	?
+?	?	MIN	?	Magazine Inserts	No	?	?
+?	?	CIN	?	Comic Inserts	No	?	?
+?	?	BIN	?	Book Inserts	No	?	?
+?	?	GAR	?	Richard Garfield Events	No	?	?
+dcilm	?	DLM	?	DCI Legend Membership	No	?	?
+?	?	PR	?	Other Promos	No	?	?
+m12	?	?	M12	Magic 2012	Yes	?	7/15/2011
+nph	NPH	NPH	NPH	New Phyrexia	No	Scars of Mirrodin	5/13/2011
+mbs	MBS	MBS	MBS 	Mirrodin Besieged	No	Scars of Mirrodin	2/4/2011
+me4	?	?	ME4	Masters Edition IV	No	?	1/10/2011
+pd2	?	PD2	PD2	Premium Deck Series: Fire and Lightning	No	?	11/19/2010
+som	?	SOM	SOM 	Scars of Mirrodin	No	Scars of Mirrodin	10/1/2010
+ddg	?	?	?	Duel Decks: Knights vs. Dragons	No	?	4/1/2011
+ddf	?	DDF	DDF 	Duel Decks: Elspeth vs. Tezzeret	No	?	9/3/2010
+fvr	?	V10	FVR	From the Vault: Relics	No	?	8/27/2010
+m11	M11	M11	M11 	Magic 2011	Yes	?	7/16/2010
+arc	AR	ARC	ARC	Archenemy	No	?	6/18/2010
+dpa	?	DPA	?	Duels of the Planeswalker	No	?	6/4/2010
+roe	ROE	ROE	ROE 	Rise of the Eldrazi	No	Zendikar	4/23/2010
+pvc	?	DDE	DDE 	Duel Decks: Phyrexia vs. the Coalition	No	?	3/19/2010
+wwk	WWK	WWK	WWK 	Worldwake	No	Zendikar	2/5/2010
+pds	?	H09	H09	Premium Deck Series: Slivers	No	?	11/20/2009
+gvl	?	DDD	DDD 	Duel Decks: Garruk vs. Liliana	No	?	10/30/2009
+zen	ZEN	ZEN	ZEN 	Zendikar	No	Zendikar	10/2/2009
+me3	?	?	ME3	Masters Edition III	No	?	9/7/2009
+pch	?	HOP	HOP	Planechase	No	?	9/4/2009
+fve	?	V09	FVE	From the Vault: Exiled	No	?	8/28/2009
+m10	M10	M10	M10 	Magic 2010	Yes	?	7/17/2009
+arb	ARB	ARB	ARB 	Alara Reborn	No	Shards of Alara	4/30/2009
+dvd	?	DDC	DDC 	Duel Decks: Divine vs. Demonic	No	?	4/10/2009
+cfx	CFX	CFX	CON 	Conflux	No	Shards of Alara	2/6/2009
+jvc	?	DD2	DD2 	Duel Decks: Jace vs. Chandra	No	?	11/7/2008
+ala	ALA	ALA	ALA 	Shards of Alara	No	Shards of Alara	10/3/2008
+me2	?	?	ME2	Masters Edition II	No	?	9/22/2008
+fvd	?	DRB	FVD	From the Vault: Dragons	No	?	8/29/2008
+eve	EVE	EVE	EVE 	Eventide	No	Shadowmoor	7/25/2008
+shm	SHM	SHM	SHM 	Shadowmoor	No	Shadowmoor	5/2/2008
+mt	MOR	MOR	MOR 	Morningtide	No	Lorwyn	2/1/2008
+evg	?	EVG	EVG	Duel Decks: Elves vs. Goblins	No	?	11/16/2007
+lw	LRW	LRW	LRW 	Lorwyn	No	Lorwyn	10/12/2007
+med	MED	?	MED	Masters Edition	No	?	9/10/2007
+10e	10TH	10E	10E 	Tenth Edition	Yes	?	7/14/2007
+fut	FUT	FUT	FUT 	Future Sight	No	Time Spiral	5/4/2007
+pc	PLC	PLC	PLC	Planar Chaos	No	Time Spiral	2/2/2007
+ts	TSP	TSP	TSP	Time Spiral	No	Time Spiral	10/6/2006
+tsts	TSB	TSB	TSB	"Time Spiral ""Timeshifted"""	No	?	10/6/2006
+cs	CSP	CS	CSP 	Coldsnap	No	Ice Age	7/21/2006
+cstd	?	CST	?	Coldsnap Theme Decks	No	?	7/9/2006
+di	DIS	DIS	DIS 	Dissension	No	Ravnica	5/5/2006
+gp	GPT	GP	GPT 	Guildpact	No	Ravnica	2/3/2006
+rav	RAV	RAV	RAV 	Ravnica: City of Guilds	No	Ravnica	10/7/2005
+?	?	MAE	?	Magic Encyclopedia	No	?	8/22/2005
+9e	9TH	9E	9ED 	Ninth Edition	Yes	?	7/29/2005
+sok	SOK	SOK	SOK 	Saviors of Kamigawa	No	Kamigawa	6/3/2005
+bok	BOK	BOK	BOK 	Betrayers of Kamigawa	No	Kamigawa	2/4/2005
+uh	UNH	UNH	UNH	Unhinged	No	?	11/19/2004
+chk	CHK	CHK	CHK 	Champions of Kamigawa	No	Kamigawa	10/1/2004
+5dn	5DN	FD	5DN 	Fifth Dawn	No	Mirrodin	6/4/2004
+ds	DST	DS	DST 	Darksteel	No	Mirrodin	2/6/2004
+mi	MRD	MR	MRD 	Mirrodin	No	Mirrodin	10/3/2003
+8e	8TH	8E	8ED 	Eighth Edition	Yes	?	7/28/2003
+sc	SCG	SC	SCG 	Scourge	No	Onslaught	5/26/2003
+le	LGN	LE	LGN 	Legions	No	Onslaught	1/25/2003
+on	ONS	ON	ONS 	Onslaught	No	Onslaught	10/7/2002
+ju	JUD	JU	JUD 	Judgment	No	Odyssey	5/27/2002
+tr	TOR	TO	TOR 	Torment	No	Odyssey	2/4/2002
+dm	DM	DM	DKM	Deckmasters	No	?	12/1/2001
+od	OD	OD	ODY 	Odyssey	No	Odyssey	9/22/2001
+ap	AP	AP	APC 	Apocalypse	No	Invasion	5/26/2001
+7e	7TH	7E	7ED 	Seventh Edition	Yes	Starter	4/11/2001
+ps	PS	PS	PLS 	Planeshift	No	Invasion	2/5/2001
+bd	BD	BD	BTD	Beatdown Box Set	No	?	12/1/2000
+in	IN	IN	INV 	Invasion	No	Invasion	10/2/2000
+st2k	ST2	S00	S00	Starter 2000	No	Starter	7/1/2000
+pr	PR	PY	PCY 	Prophecy	No	Masques	6/5/2000
+ne	NE	NE	NMS 	Nemesis	No	Masques	2/14/2000
+br	?	BRB	BRB	Battle Royale Box Set	No	?	11/12/1999
+mm	MM	MM	MMQ 	Mercadian Masques	No	Masques	10/4/1999
+p3k	P3	P3	PTK	Portal Three Kingdoms	No	Portal	7/1/1999
+st	ST1	ST	S99	Starter 1999	No	Starter	7/1/1999
+ud	UD	UD	UDS 	Urza's Destiny	No	Urza	6/7/1999
+6e	6TH	6E	6ED 	Classic Sixth Edition	Yes	?	4/28/1999
+ul	UL	UL	ULG 	Urza's Legacy	No	Urza	2/15/1999
+at	?	AT	ATH	Anthologies	No	?	11/1/1998
+us	UZ	US	USG 	Urza's Saga	No	Urza	10/12/1998
+ug	UG	UG	UGL	Unglued	No	?	8/17/1998
+ex	EX	EX	EXO 	Exodus	No	Tempest	6/15/1998
+po2	P2	P2	P02	Portal Second Age	No	Portal	6/1/1998
+sh	ST	SH	STH 	Stronghold	No	Tempest	3/2/1998
+tp	TE	TE	TMP 	Tempest	No	Tempest	10/14/1997
+wl	WL	WL	WTH 	Weatherlight	No	Mirage	6/9/1997
+po	PT	PT	POR	Portal	No	Portal	6/1/1997
+5e	5TH	5E	5ED 	Fifth Edition	Yes	?	3/24/1997
+vi	VI	VI	VIS 	Visions	No	Mirage	2/3/1997
+mr	MI	MI	MIR 	Mirage	No	Mirage	10/8/1996
+?	?	I2P	?	Rivals Quick Start Set	No	?	7/1/1996
+ai	AI	AL	ALL 	Alliances	No	Ice Age	6/10/1996
+hl	HL	HL	HML 	Homelands	No	Early Expansions	10/1/1995
+ch	CH	CH	CHR	Chronicles	No	?	7/1/1995
+ia	IA	IA	ICE 	Ice Age	No	Ice Age	6/1/1995
+4e	4TH	4E	4ED 	Fourth Edition	Yes	?	4/1/1995
+fe	FE	FE	FEM 	Fallen Empires	No	Early Expansions	11/1/1994
+dk	DK	DK	DRK 	The Dark	No	Early Expansions	8/1/1994
+lg	LE	LG	LEG 	Legends	No	Early Expansions	6/1/1994
+rv	RV	R	3ED 	Revised Edition	Yes	?	4/1/1994
+aq	AQ	AQ	ATQ 	Antiquities	No	Early Expansions	3/1/1994
+un	U	U	2ED 	Unlimited Edition	Yes	?	12/1/1993
+an	AN	AN	ARN 	Arabian Nights	No	Early Expansions	12/1/1993
+be	B	B	LEB 	Limited Edition Beta	Yes	?	10/1/1993
+al	A	A	LEA 	Limited Edition Alpha	Yes	?	8/5/1993
+itp	?	?	?	Introductory Two-Player Set	No	?	?
+15ann	?	?	?	15th Anniversary	No	?	?
+gpx	?	?	?	Grand Prix	No	?	?
+pro	?	?	?	Pro Tour	No	?	?
+mgdc	?	?	?	Magic Game Day Cards	No	?	?
+wrl	?	?	?	Worlds	No	?	?
+drc	?	?	?	Dragon Con	No	?	?
+ptc	?	?	?	Prerelease Events	No	?	?
+rep	?	?	?	Release Events	No	?	?
+mlp	?	?	?	Magic: The Gathering Launch Parties	No	?	?
+mss	?	?	?	Magic Scholarship Series	No	?	?
+grc	?	?	?	Gateway	No	?	?
+cp	?	?	?	Champs	No	?	?
+thgt	?	?	?	Two-Headed Giant Tournament	No	?	?
+jsr	?	?	?	Junior Series	No	?	?
+ajs	?	?	?	APAC Junior Series	No	?	?
+arena	?	?	?	Arena League	No	?	?
+fnmp	?	?	?	Friday Night Magic	No	?	?
+mprp	?	?	?	Magic Player Rewards	No	?	?
+sus	?	?	?	Super Series	No	?	?
+hho	?	?	?	Happy Holidays	No	?	?
+jr	?	?	?	Judge Gift Program	No	?	?
+pot	?	?	?	Portal Demogame	No	?	?
+euro	?	?	?	European Land Program	No	?	?
+guru	?	?	?	Guru	No	?	?
+apac	?	?	?	Asia Pacific Land Program	No	?	?
+wotc	?	?	?	WotC Online Store	No	?	?
+uqc	?	?	?	Celebration Cards	No	?	?
+mbp	?	?	?	Media Inserts	No	?	?
