@@ -3,19 +3,19 @@
 = Introduction =
 
 Here are a few pages I found for cataloging your Magic cards:
-* http://community.wizards.com/go/thread/view/75842/27402381/How_do_you_organize_your_MTG_collection!?pg=7
-* http://community.wizards.com/go/thread/view/75842/27129561/Wish_Me_Luck!?pg=44
-* http://www.draftmagic.com/2010/11/02/piles-and-piles-of-magic-cards-a-guide-to-organizing-your-card-collection/
-* http://boardgamegeek.com/thread/296856/a-way-to-catalogue-cards
+ * http://community.wizards.com/go/thread/view/75842/27402381/How_do_you_organize_your_MTG_collection!?pg=7
+ * http://community.wizards.com/go/thread/view/75842/27129561/Wish_Me_Luck!?pg=44
+ * http://www.draftmagic.com/2010/11/02/piles-and-piles-of-magic-cards-a-guide-to-organizing-your-card-collection/
+ * http://boardgamegeek.com/thread/296856/a-way-to-catalogue-cards
 
 = Mechanical Auto-Sorter =
 
 == University Project ==
-* http://ece.olin.edu/pe/projects/cardcataloger/
-* They used a PIC18 with built-in USB support for the project:
-** http://milan.milanovic.org/skola/parport/usbport-03.htm
-** http://ww1.microchip.com/downloads/en/DeviceDoc/39632e.pdf
+ * http://ece.olin.edu/pe/projects/cardcataloger/
+ * They used a PIC18 with built-in USB support for the project:
+  * http://milan.milanovic.org/skola/parport/usbport-03.htm
+  * http://ww1.microchip.com/downloads/en/DeviceDoc/39632e.pdf
 
 == Legos ==
-* http://youtu.be/iaJw2iKumxE
-* http://youtu.be/eLrLauLKgJc
+ * http://youtu.be/iaJw2iKumxE
+ * http://youtu.be/eLrLauLKgJc
