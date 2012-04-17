@@ -33,3 +33,8 @@ Here are a few pages I found for cataloging your Magic cards:
  * Official List of all MtG Expansions: http://www.wizards.com/magic/tcg/Article.aspx?x=mtg/tcg/products/allproducts
  * MagicCards.info: http://magiccards.info/
  * Gatherer: http://gatherer.wizards.com/Pages/Default.aspx
+
+= Magic Vision =
+ * http://www.reddit.com/r/magicTCG/comments/lccrx/full_source_code_of_the_mtg_card_image/
+ * https://github.com/petesimard/Magic-Vision
+ * http://ark42.com/mtg/
