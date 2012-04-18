@@ -15,23 +15,27 @@ Here are a few pages I found for cataloging your Magic cards:
  * They used a PIC18 with built-in USB support for the project:
   * http://milan.milanovic.org/skola/parport/usbport-03.htm
   * http://ww1.microchip.com/downloads/en/DeviceDoc/39632e.pdf
+ * They also used suction to pick up the cards
 
-== Legos ==
- # *Card Sorter v0.1 and v0.1.1* - _Printer Feed Mechanism_
-  * http://youtu.be/iaJw2iKumxE
-  * http://youtu.be/eLrLauLKgJc
- # *Lego Mindstorms Card Sorting Machine* - _52-card Deck_
-  * http://youtu.be/g3F_6ngs9B4
-  * http://youtu.be/WIjvgz3luHk
- # *Lego Mindstorms NXT- Card Sorting Robot (beta)* - _52-card Deck_
-  * http://youtu.be/l2CpOVwgaS4
- # *NXT Card Color Piling* - _Land Sorting with Printer Feed Mechanism_
-  * http://youtu.be/xsmA-ckwe3s
+== Lego Mindstorms ==
+ * *Using a Printer Feed Mechanism*
+  # *Card Sorter v0.1 and v0.1.1*
+   * http://youtu.be/iaJw2iKumxE
+   * http://youtu.be/eLrLauLKgJc
+  # *Lego Mindstorms Card Sorting Machine* - _52-card Deck_
+   * http://youtu.be/g3F_6ngs9B4
+   * http://youtu.be/WIjvgz3luHk
+  # *Lego Mindstorms NXT- Card Sorting Robot (beta)* - _52-card Deck_
+   * http://youtu.be/l2CpOVwgaS4
+  # *NXT Card Color Piling* - _Land Sorting_
+   * http://youtu.be/xsmA-ckwe3s
+ * *Using Pneumatic Suction*
+  # *Vertigo III* - _Window-Climbing Robot using Pneumatic Suction Cups_
+   * http://us.mindstorms.lego.com/en-us/Community/NXTLog/DisplayProject.aspx?id=d951c84b-8a5b-4dd6-a79f-6b37b498d202
+   * http://bricks.stackexchange.com/questions/1074/lego-compatible-suction-cups
 
-=== Pneumatics ===
+=== Pneumatics Resources ===
  * http://education.lego.com/en-us/lego-education-product-database/machines-and-mechanisms/9641-pneumatics-add-on-set/
-  * http://bricks.stackexchange.com/questions/1074/lego-compatible-suction-cups
-  * http://us.mindstorms.lego.com/en-us/Community/NXTLog/DisplayProject.aspx?id=d951c84b-8a5b-4dd6-a79f-6b37b498d202
 
 ==== Buy Pneumatics Here ====
  * http://www.bricklink.com/
