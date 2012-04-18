@@ -50,4 +50,4 @@ Here are a few pages I found for cataloging your Magic cards:
  * http://ark42.com/mtg/
 
 == Android ==
- * http://www.dev47apps.com/
+ * DroidCam: http://www.dev47apps.com/
