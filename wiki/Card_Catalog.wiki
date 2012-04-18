@@ -48,3 +48,6 @@ Here are a few pages I found for cataloging your Magic cards:
  * http://www.reddit.com/r/magicTCG/comments/lccrx/full_source_code_of_the_mtg_card_image/
  * https://github.com/petesimard/Magic-Vision
  * http://ark42.com/mtg/
+
+== Android ==
+ * http://www.dev47apps.com/
