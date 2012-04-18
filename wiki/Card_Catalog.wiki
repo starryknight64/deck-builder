@@ -17,15 +17,15 @@ Here are a few pages I found for cataloging your Magic cards:
   * http://ww1.microchip.com/downloads/en/DeviceDoc/39632e.pdf
 
 == Legos ==
- # 
+ # *Card Sorter v0.1 and v0.1.1* - _Printer Feed Mechanism_
   * http://youtu.be/iaJw2iKumxE
   * http://youtu.be/eLrLauLKgJc
- #
+ # *Lego Mindstorms Card Sorting Machine* - _52-card Deck_
   * http://youtu.be/g3F_6ngs9B4
   * http://youtu.be/WIjvgz3luHk
- #
+ # *Lego Mindstorms NXT- Card Sorting Robot (beta)* - _52-card Deck_
   * http://youtu.be/l2CpOVwgaS4
- #
+ # *NXT Card Color Piling* - _Land Sorting with Printer Feed Mechanism_
   * http://youtu.be/xsmA-ckwe3s
 
 === Pneumatics ===
