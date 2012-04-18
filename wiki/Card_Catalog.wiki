@@ -28,6 +28,12 @@ Here are a few pages I found for cataloging your Magic cards:
  #
   * http://youtu.be/xsmA-ckwe3s
 
+=== Pneumatics ===
+ * http://education.lego.com/en-us/lego-education-product-database/machines-and-mechanisms/9641-pneumatics-add-on-set/
+  * http://bricks.stackexchange.com/questions/1074/lego-compatible-suction-cups
+  * http://us.mindstorms.lego.com/en-us/Community/NXTLog/DisplayProject.aspx?id=d951c84b-8a5b-4dd6-a79f-6b37b498d202
+
+
 = Magic the Gathering Expansions =
  * How to tell which set is which: http://www.abugames.com/Magic_the_Gathering_Edition_Guide.html
  * Official List of all MtG Expansions: http://www.wizards.com/magic/tcg/Article.aspx?x=mtg/tcg/products/allproducts
