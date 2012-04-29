@@ -31,6 +31,7 @@ Here are a few pages I found for cataloging your Magic cards:
    * http://youtu.be/xsmA-ckwe3s
  * *Design Ideas*
   # Controlling over Bluetooth in C#: http://www.codeproject.com/Articles/31103/Driving-a-Lego-Mindstorms-Bot-Using-C
+  # Controlling over Bluetooth/USB in C#: http://www.mindsqualls.net
   # Card Dealing:
    # http://us.mindstorms.lego.com/en-us/Community/NXTLog/DisplayProject.aspx?id=5e79202f-37ea-4548-aed2-c42434103771
    # http://us.mindstorms.lego.com/en-us/Community/NXTLog/DisplayProject.aspx?id=0da42c94-5c28-41e1-bd3f-eab65b37dfd2
