@@ -1,5 +1,8 @@
 #summary Library of Cards
 
+= HOW TO SETUP GIT EXTENSIONS FOR GITHUB =
+http://www.paulrohde.com/github-101-on-windows/
+
 = Introduction =
 
 Here are a few pages I found for cataloging your Magic cards:
