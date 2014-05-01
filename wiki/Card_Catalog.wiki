@@ -13,6 +13,9 @@ Here are a few pages I found for cataloging your Magic cards:
 
 = Mechanical Auto-Sorter =
 
+== Magic the Gathering Card Sorting Machine ==
+ * https://vimeo.com/82374474
+
 == University Project ==
  * http://ece.olin.edu/pe/projects/cardcataloger/
  * They used a PIC18 with built-in USB support for the project:
