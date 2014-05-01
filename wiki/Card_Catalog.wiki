@@ -14,6 +14,7 @@ Here are a few pages I found for cataloging your Magic cards:
 = Mechanical Auto-Sorter =
 
 == Magic the Gathering Card Sorting Machine ==
+ * http://forum.arduino.cc/index.php?PHPSESSID=pe9uk2lri62dblotklkhhnegu0&topic=151474.0
  * https://vimeo.com/82374474
 
 == University Project ==
@@ -79,6 +80,7 @@ Here are a few pages I found for cataloging your Magic cards:
 = Magic Vision =
  * http://www.reddit.com/r/magicTCG/comments/lccrx/full_source_code_of_the_mtg_card_image/
  * https://github.com/petesimard/Magic-Vision
+ ** http://youtu.be/6ZQ2ek0L6so
  * http://ark42.com/mtg/
 
 == Android ==
