@@ -63,6 +63,19 @@ Here are a few pages I found for cataloging your Magic cards:
  * MagicCards.info: http://magiccards.info/
  * Gatherer: http://gatherer.wizards.com/Pages/Default.aspx
 
+= YenTheFirst card_scan =
+ * https://github.com/YenTheFirst/card_scan
+ *# http://youtu.be/ACbvvZQ3Zdk
+ *# http://youtu.be/ppNy9fdw91E
+ *# http://youtu.be/BtomlOowILc
+
+= Aaron Patterson magic_scan =
+ * https://github.com/tenderlove/magic_scan
+ ** http://youtu.be/KVemLDOF_MM
+
+= BronasBrothers Cardy Alpha Test 1 =
+ * http://youtu.be/ffebqDuh048
+
 = Magic Vision =
  * http://www.reddit.com/r/magicTCG/comments/lccrx/full_source_code_of_the_mtg_card_image/
  * https://github.com/petesimard/Magic-Vision
